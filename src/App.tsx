@@ -1,4 +1,5 @@
 import { GlobalStyles } from './styles/GlobalStyles';
+import { Analytics } from '@vercel/analytics/react';
 import Header from './components/layout/Header';
 import Hero from './components/layout/Hero';
 import Projects from './components/sections/Projects';
@@ -11,6 +12,7 @@ function App() {
   return (
     <>
       <GlobalStyles />
+      <Analytics />
       <Header />
       <Hero />
       <Projects />
