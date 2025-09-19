@@ -654,7 +654,7 @@ const ProjectDetailModern: React.FC = () => {
                   alt={`${project.title} - ${currentImageIndex + 1}`}
                 />
                 <ModalNav>
-                  {projectImages.map((_, index) => (
+                  {projectImages.map((_: string, index: number) => (
                     <NavDot
                       key={index}
                       active={index === currentImageIndex}

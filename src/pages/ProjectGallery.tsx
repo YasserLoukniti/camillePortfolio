@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiArrowLeft, FiCalendar, FiBriefcase, FiX, FiSmartphone, FiChevronLeft, FiChevronRight, FiMail, FiLinkedin } from 'react-icons/fi';
+import { FiArrowLeft, FiCalendar, FiBriefcase, FiX, FiChevronLeft, FiChevronRight, FiMail, FiLinkedin } from 'react-icons/fi';
 import { HiSparkles } from 'react-icons/hi';
 import { theme } from '../styles/theme';
 import Badge from '../components/ui/Badge';
@@ -238,67 +238,8 @@ const CardText = styled.div`
 `;
 
 // ========================================
-// MOBILE MOCKUP COMPONENTS
+// MOBILE MOCKUP COMPONENTS - Removed unused components
 // ========================================
-
-const MobileSection = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: ${theme.spacing['12']} 0;
-  background: ${theme.colors.gray900};
-  border-radius: ${theme.borderRadius.xl};
-  margin-top: ${theme.spacing['8']};
-`;
-
-const IPhoneMockup = styled.div`
-  position: relative;
-  width: 320px;
-  height: 640px;
-  background: #1a1a1a;
-  border-radius: 40px;
-  padding: 10px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 25px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 150px;
-    height: 25px;
-    background: #000;
-    border-radius: 15px;
-  }
-`;
-
-const IPhoneScreen = styled.div`
-  width: 100%;
-  height: 100%;
-  background: ${theme.colors.white};
-  border-radius: 30px;
-  overflow: hidden;
-  position: relative;
-`;
-
-const IPhoneScrollContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  overflow-y: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`;
-
-const MobileImage = styled.img`
-  width: 100%;
-  height: auto;
-  display: block;
-`;
 
 // ========================================
 // MODAL COMPONENTS
