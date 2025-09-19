@@ -107,7 +107,7 @@ const TagLine = styled(motion.div)`
 `;
 
 const Title = styled(motion.h1)`
-  font-size: clamp(3rem, 8vw, 7rem);
+  font-size: clamp(2.5rem, 6vw, 5rem);
   font-weight: ${theme.fontWeights.bold};
   line-height: 1.1;
   margin-bottom: ${theme.spacing['6']};
@@ -133,7 +133,7 @@ const Title = styled(motion.h1)`
 const Subtitle = styled(motion.p)`
   font-size: ${theme.fontSizes.xl};
   color: ${theme.colors.gray400};
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto ${theme.spacing['10']};
   line-height: ${theme.lineHeights.relaxed};
 `;
@@ -194,7 +194,7 @@ const TypewriterText = styled.span`
 
 const Hero: React.FC = () => {
   const [typedText, setTypedText] = useState('');
-  const fullText = 'Designer de produits IA';
+  const fullText = 'Product Designer & Gestion Produit';
 
   useEffect(() => {
     let index = 0;

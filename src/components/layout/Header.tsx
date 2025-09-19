@@ -211,6 +211,7 @@ const Header: React.FC = () => {
             variant="primary"
             size="sm"
             href="#contact"
+            style={{ cursor: 'pointer' }}
           >
             Discutons
           </DesktopButton>

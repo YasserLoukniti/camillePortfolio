@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiExternalLink, FiEye } from 'react-icons/fi';
+import { FiEye } from 'react-icons/fi';
 import { theme } from '../../styles/theme';
 import Badge from '../ui/Badge';
 import { portfolioData } from '../../data/portfolio';
@@ -37,7 +38,7 @@ const SectionTitle = styled(motion.h2)`
 const SectionSubtitle = styled(motion.p)`
   font-size: ${theme.fontSizes.lg};
   color: ${theme.colors.gray400};
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto;
 `;
 
@@ -83,10 +84,10 @@ const ProjectsGrid = styled(motion.div)`
 const ProjectCard = styled(motion.div)`
   position: relative;
   background: ${theme.colors.gray900};
-  border-radius: ${theme.borderRadius['2xl']};
+  border-radius: 24px;
   overflow: hidden;
   cursor: pointer;
-  height: 400px;
+  height: auto;
   transition: all ${theme.transitions.base};
 
   &:hover {
@@ -97,16 +98,17 @@ const ProjectCard = styled(motion.div)`
 
 const ProjectImage = styled.div<{ image?: string }>`
   width: 100%;
-  height: 250px;
+  height: 240px;
   background: ${props => props.image
-    ? `url(${props.image})`
+    ? `url(${props.image}) center/cover no-repeat`
     : theme.colors.gradientAI};
   background-size: cover;
   background-position: center;
   position: relative;
   overflow: hidden;
+  transition: transform ${theme.transitions.base};
 
-  &::before {
+  &::after {
     content: '';
     position: absolute;
     top: 0;
@@ -115,15 +117,13 @@ const ProjectImage = styled.div<{ image?: string }>`
     bottom: 0;
     background: linear-gradient(
       to bottom,
-      transparent 0%,
-      rgba(0, 0, 0, 0.8) 100%
+      transparent 50%,
+      rgba(0, 0, 0, 0.4) 100%
     );
-    opacity: 0;
-    transition: opacity ${theme.transitions.base};
   }
 
-  ${ProjectCard}:hover &::before {
-    opacity: 1;
+  ${ProjectCard}:hover & {
+    transform: scale(1.08);
   }
 `;
 
@@ -132,8 +132,9 @@ const ProjectOverlay = styled(motion.div)`
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
+  height: 240px;
   background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(4px);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -141,9 +142,11 @@ const ProjectOverlay = styled(motion.div)`
   padding: ${theme.spacing['8']};
   opacity: 0;
   transition: all ${theme.transitions.base};
+  pointer-events: none;
 
   ${ProjectCard}:hover & {
     opacity: 1;
+    pointer-events: auto;
   }
 `;
 
@@ -173,11 +176,12 @@ const ProjectTags = styled.div`
   display: flex;
   gap: ${theme.spacing['2']};
   flex-wrap: wrap;
+  margin-top: ${theme.spacing['3']};
 `;
 
 const ProjectActions = styled.div`
   display: flex;
-  gap: ${theme.spacing['4']};
+  justify-content: center;
   margin-top: ${theme.spacing['6']};
 `;
 
@@ -186,30 +190,38 @@ const ActionButton = styled(motion.button)`
   align-items: center;
   gap: ${theme.spacing['2']};
   padding: ${theme.spacing['3']} ${theme.spacing['6']};
-  background: ${theme.colors.gradientAI};
-  color: ${theme.colors.white};
+  background: ${theme.colors.white};
+  color: ${theme.colors.black};
   border: none;
   border-radius: ${theme.borderRadius.lg};
   font-size: ${theme.fontSizes.sm};
-  font-weight: ${theme.fontWeights.medium};
+  font-weight: ${theme.fontWeights.semibold};
   cursor: pointer;
   transition: all ${theme.transitions.base};
+  z-index: 10;
 
   &:hover {
     transform: scale(1.05);
-    box-shadow: ${theme.shadows.glow};
+    background: ${theme.colors.whiteLight};
+    box-shadow: ${theme.shadows.lg};
   }
 `;
 
-const Categories = ['Tous', 'Product Design', 'UX/UI Design', 'Mobile Design', 'AI Tools'];
+const Categories = ['Tous', 'Product Design', 'UX/UI Design'];
 
 const Projects: React.FC = () => {
+  const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState('Tous');
   const [hoveredProject, setHoveredProject] = useState<number | null>(null);
 
   const filteredProjects = selectedCategory === 'Tous'
     ? portfolioData.projects
     : portfolioData.projects.filter(project => project.category === selectedCategory);
+
+  const handleProjectClick = (project: any) => {
+    const slug = project.slug || project.id;
+    navigate(`/project/${slug}`);
+  };
 
   return (
     <ProjectsSection id="projects">
@@ -229,7 +241,7 @@ const Projects: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            Découvrez mes dernières créations en design d'interface et d'expérience utilisateur
+            Découvrez mes dernières créations en design d'interface et expérience utilisateur
           </SectionSubtitle>
         </SectionHeader>
 
@@ -267,31 +279,37 @@ const Projects: React.FC = () => {
                 viewport={{ once: true }}
                 onHoverStart={() => setHoveredProject(project.id)}
                 onHoverEnd={() => setHoveredProject(null)}
+                onClick={() => handleProjectClick(project)}
               >
-                <ProjectImage image={project.image} />
-
-                <ProjectOverlay
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: hoveredProject === project.id ? 1 : 0 }}
-                  transition={{ duration: 0.3 }}
-                >
+                <ProjectImage image={project.image}>
+                  <ProjectOverlay
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: hoveredProject === project.id ? 1 : 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
                   <ProjectActions>
-                    <ActionButton whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <ActionButton
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleProjectClick(project);
+                      }}
+                    >
                       <FiEye />
                       Voir le projet
                     </ActionButton>
-                    <ActionButton whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                      <FiExternalLink />
-                      Live demo
-                    </ActionButton>
                   </ProjectActions>
-                </ProjectOverlay>
+                  </ProjectOverlay>
+                </ProjectImage>
 
                 <ProjectContent>
                   <ProjectTitle>{project.title}</ProjectTitle>
-                  <ProjectDescription>{project.description}</ProjectDescription>
+                  <ProjectDescription>
+                    {(project as any).shortDescription || project.description}
+                  </ProjectDescription>
                   <ProjectTags>
-                    {project.tags.slice(0, 3).map(tag => (
+                    {project.tags.slice(0, 4).map(tag => (
                       <Badge key={tag} size="sm" variant={project.featured ? 'primary' : 'default'}>
                         {tag}
                       </Badge>
@@ -302,6 +320,22 @@ const Projects: React.FC = () => {
             ))}
           </ProjectsGrid>
         </AnimatePresence>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          viewport={{ once: true }}
+          style={{
+            textAlign: 'center',
+            marginTop: theme.spacing['12'],
+            color: theme.colors.gray400,
+            fontSize: theme.fontSizes.lg,
+            fontStyle: 'italic'
+          }}
+        >
+          + 5 autres projets
+        </motion.div>
       </Container>
     </ProjectsSection>
   );

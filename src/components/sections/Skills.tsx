@@ -2,8 +2,8 @@ import React from 'react';
 import styled, { keyframes } from 'styled-components';
 import { motion } from 'framer-motion';
 import {
-  FiFigma, FiLayers, FiGrid, FiUsers,
-  FiCode, FiBriefcase, FiCpu
+  FiFigma, FiLayers, FiGrid,
+  FiBriefcase, FiCpu
 } from 'react-icons/fi';
 import { SiAdobexd, SiAdobephotoshop, SiAdobeillustrator } from 'react-icons/si';
 import { HiSparkles } from 'react-icons/hi';
@@ -56,7 +56,7 @@ const SectionSubtitle = styled(motion.p)`
 
 const SkillsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: ${theme.spacing['8']};
   margin-bottom: ${theme.spacing['16']};
 `;
@@ -65,8 +65,8 @@ const SkillCategory = styled(motion.div)``;
 
 const CategoryTitle = styled.h3`
   font-size: ${theme.fontSizes['2xl']};
-  font-weight: ${theme.fontWeights.semibold};
-  margin-bottom: ${theme.spacing['6']};
+  font-weight: ${theme.fontWeights.bold};
+  margin-bottom: ${theme.spacing['8']};
   display: flex;
   align-items: center;
   gap: ${theme.spacing['3']};
@@ -80,7 +80,7 @@ const CategoryTitle = styled.h3`
 const SkillsList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: ${theme.spacing['4']};
+  gap: ${theme.spacing['5']};
 `;
 
 const SkillItem = styled.div`
@@ -102,13 +102,14 @@ const SkillName = styled.span`
 `;
 
 const SkillLevel = styled.span`
-  font-size: ${theme.fontSizes.sm};
-  color: ${theme.colors.gray500};
+  font-size: ${theme.fontSizes.base};
+  color: ${theme.colors.white};
+  font-weight: ${theme.fontWeights.bold};
 `;
 
 const ProgressBar = styled.div`
   width: 100%;
-  height: 6px;
+  height: 8px;
   background: ${theme.colors.gray800};
   border-radius: ${theme.borderRadius.full};
   overflow: hidden;
@@ -195,19 +196,19 @@ const Skills: React.FC = () => {
 
   const skillCategories = [
     {
-      title: 'Design',
+      title: '🎨 Design',
       icon: <FiFigma />,
       skills: portfolioData.skills.design
     },
     {
-      title: 'Recherche UX',
-      icon: <FiUsers />,
-      skills: portfolioData.skills.research
+      title: '👥 Product Management',
+      icon: <FiBriefcase />,
+      skills: portfolioData.skills.productManagement
     },
     {
-      title: 'Technique',
-      icon: <FiCode />,
-      skills: portfolioData.skills.technical
+      title: '🤖 IA & Technique',
+      icon: <FiCpu />,
+      skills: portfolioData.skills.aiTechnical
     }
   ];
 

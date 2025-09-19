@@ -1,6 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { theme } from '../../styles/theme';
 
 interface ButtonProps {
@@ -57,14 +58,16 @@ const ButtonVariants = {
   `,
 
   outline: css`
-    background: transparent;
+    background: rgba(255, 255, 255, 0.05);
     color: ${theme.colors.white};
-    border: 1px solid ${theme.colors.gray600};
+    border: 1px solid rgba(255, 255, 255, 0.3);
 
     &:hover:not(:disabled) {
-      border-color: ${theme.colors.violet};
-      color: ${theme.colors.violet};
-      box-shadow: ${theme.shadows.glow};
+      background: ${theme.colors.white};
+      color: ${theme.colors.black};
+      border-color: ${theme.colors.white};
+      transform: translateY(-2px);
+      box-shadow: ${theme.shadows.lg};
     }
   `,
 
@@ -130,6 +133,8 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   ...props
 }) => {
+  const navigate = useNavigate();
+
   const content = (
     <>
       {icon && <span>{icon}</span>}
@@ -137,11 +142,34 @@ const Button: React.FC<ButtonProps> = ({
     </>
   );
 
-  if (href) {
+  const handleClick = () => {
+    if (onClick) {
+      onClick();
+    } else if (href) {
+      // Check if it's an internal link (starts with / or #)
+      if (href.startsWith('/')) {
+        navigate(href);
+      } else if (href.startsWith('#')) {
+        // Smooth scroll to section
+        const element = document.querySelector(href);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      } else {
+        // External link
+        window.location.href = href;
+      }
+    }
+  };
+
+  // For external links, keep using anchor tag
+  if (href && !href.startsWith('/') && !href.startsWith('#')) {
     return (
       <StyledButton
         as="a"
         href={href}
+        target="_blank"
+        rel="noopener noreferrer"
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         {...props}
@@ -153,7 +181,7 @@ const Button: React.FC<ButtonProps> = ({
 
   return (
     <StyledButton
-      onClick={onClick}
+      onClick={handleClick}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       {...props}

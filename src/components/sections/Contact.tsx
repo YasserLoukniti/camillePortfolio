@@ -1,23 +1,13 @@
 import React, { useState } from 'react';
-import styled, { keyframes } from 'styled-components';
-import { motion } from 'framer-motion';
-import { FiMail, FiLinkedin, FiSend, FiMapPin } from 'react-icons/fi';
+import styled from 'styled-components';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiLinkedin, FiSend, FiCheck, FiAlertCircle } from 'react-icons/fi';
+import emailjs from '@emailjs/browser';
 import { theme } from '../../styles/theme';
 import Button from '../ui/Button';
 import Card from '../ui/Card';
 import GlowEffect from '../ui/GlowEffect';
 import { portfolioData } from '../../data/portfolio';
-
-const pulseAnimation = keyframes`
-  0%, 100% {
-    transform: scale(1);
-    opacity: 0.5;
-  }
-  50% {
-    transform: scale(1.1);
-    opacity: 0.8;
-  }
-`;
 
 const ContactSection = styled.section`
   padding: ${theme.spacing['32']} 0;
@@ -55,69 +45,10 @@ const SectionSubtitle = styled(motion.p)`
 `;
 
 const ContactGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: ${theme.spacing['12']};
-  align-items: start;
-
-  @media (max-width: ${theme.breakpoints.lg}) {
-    grid-template-columns: 1fr;
-  }
+  max-width: 600px;
+  margin: 0 auto;
 `;
 
-const ContactInfo = styled(motion.div)``;
-
-const InfoCard = styled(Card)`
-  margin-bottom: ${theme.spacing['8']};
-`;
-
-const InfoTitle = styled.h3`
-  font-size: ${theme.fontSizes['2xl']};
-  font-weight: ${theme.fontWeights.semibold};
-  margin-bottom: ${theme.spacing['6']};
-  color: ${theme.colors.white};
-`;
-
-const InfoItem = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${theme.spacing['4']};
-  padding: ${theme.spacing['4']} 0;
-  color: ${theme.colors.gray300};
-  transition: all ${theme.transitions.base};
-  cursor: pointer;
-
-  &:hover {
-    color: ${theme.colors.violet};
-    transform: translateX(4px);
-
-    svg {
-      color: ${theme.colors.violet};
-      transform: rotate(10deg);
-    }
-  }
-
-  svg {
-    font-size: 1.5rem;
-    color: ${theme.colors.gray500};
-    transition: all ${theme.transitions.base};
-  }
-`;
-
-const InfoText = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${theme.spacing['1']};
-`;
-
-const InfoLabel = styled.span`
-  font-size: ${theme.fontSizes.sm};
-  color: ${theme.colors.gray500};
-`;
-
-const InfoValue = styled.span`
-  font-size: ${theme.fontSizes.base};
-`;
 
 const FormContainer = styled(motion.div)``;
 
@@ -179,37 +110,6 @@ const TextArea = styled.textarea`
   }
 `;
 
-const FormRow = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: ${theme.spacing['6']};
-
-  @media (max-width: ${theme.breakpoints.sm}) {
-    grid-template-columns: 1fr;
-  }
-`;
-
-const AvailabilityBadge = styled(motion.div)`
-  display: inline-flex;
-  align-items: center;
-  gap: ${theme.spacing['2']};
-  padding: ${theme.spacing['2']} ${theme.spacing['4']};
-  background: rgba(52, 211, 153, 0.1);
-  border: 1px solid rgba(52, 211, 153, 0.3);
-  border-radius: ${theme.borderRadius.full};
-  color: ${theme.colors.success};
-  font-size: ${theme.fontSizes.sm};
-  margin-bottom: ${theme.spacing['6']};
-
-  &::before {
-    content: '';
-    width: 8px;
-    height: 8px;
-    background: ${theme.colors.success};
-    border-radius: 50%;
-    animation: ${pulseAnimation} 2s ease-in-out infinite;
-  }
-`;
 
 const CTASection = styled.div`
   text-align: center;
@@ -234,6 +134,29 @@ const CTAText = styled.p`
   margin-bottom: ${theme.spacing['8']};
 `;
 
+const Notification = styled(motion.div)<{ type: 'success' | 'error' }>`
+  position: fixed;
+  top: ${theme.spacing['8']};
+  right: ${theme.spacing['8']};
+  padding: ${theme.spacing['4']} ${theme.spacing['6']};
+  background: ${props => props.type === 'success'
+    ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)'
+    : 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)'};
+  color: ${theme.colors.white};
+  border-radius: ${theme.borderRadius.lg};
+  box-shadow: ${theme.shadows.xl};
+  display: flex;
+  align-items: center;
+  gap: ${theme.spacing['3']};
+  z-index: 9999;
+  font-weight: ${theme.fontWeights.medium};
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+`;
+
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -243,6 +166,25 @@ const Contact: React.FC = () => {
     message: ''
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [notification, setNotification] = useState<{
+    show: boolean;
+    type: 'success' | 'error';
+    message: string;
+  }>({
+    show: false,
+    type: 'success',
+    message: ''
+  });
+
+  // Initialize EmailJS with public key
+  React.useEffect(() => {
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+    if (publicKey) {
+      emailjs.init(publicKey);
+    }
+  }, []);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
@@ -250,9 +192,63 @@ const Contact: React.FC = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+
+    if (!serviceId || !templateId) {
+      console.log('EmailJS not configured. Form data:', formData);
+      setNotification({
+        show: true,
+        type: 'error',
+        message: 'Le service email n\'est pas configuré. Contactez-moi via LinkedIn.'
+      });
+      setTimeout(() => setNotification(prev => ({ ...prev, show: false })), 5000);
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      await emailjs.send(
+        serviceId,
+        templateId,
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          company: formData.company || 'Non spécifiée',
+          budget: formData.budget || 'Non spécifié',
+          message: formData.message
+        }
+      );
+
+      setNotification({
+        show: true,
+        type: 'success',
+        message: 'Message envoyé avec succès ! Je vous répondrai rapidement.'
+      });
+
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        company: '',
+        budget: '',
+        message: ''
+      });
+    } catch (error) {
+      console.error('Error sending email:', error);
+      setNotification({
+        show: true,
+        type: 'error',
+        message: 'Erreur lors de l\'envoi. Veuillez réessayer ou me contacter via LinkedIn.'
+      });
+    } finally {
+      setIsSubmitting(false);
+      setTimeout(() => setNotification(prev => ({ ...prev, show: false })), 5000);
+    }
   };
 
   return (
@@ -278,58 +274,6 @@ const Contact: React.FC = () => {
         </SectionHeader>
 
         <ContactGrid>
-          <ContactInfo
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <AvailabilityBadge
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6 }}
-            >
-              Disponible pour de nouveaux projets
-            </AvailabilityBadge>
-
-            <InfoCard variant="gradient" glowOnHover>
-              <InfoTitle>Contactez-moi</InfoTitle>
-
-              <InfoItem>
-                <FiMail />
-                <InfoText>
-                  <InfoLabel>Email</InfoLabel>
-                  <InfoValue>{portfolioData.personal.email}</InfoValue>
-                </InfoText>
-              </InfoItem>
-
-              <InfoItem>
-                <FiLinkedin />
-                <InfoText>
-                  <InfoLabel>LinkedIn</InfoLabel>
-                  <InfoValue>@camille-perles</InfoValue>
-                </InfoText>
-              </InfoItem>
-
-              <InfoItem>
-                <FiMapPin />
-                <InfoText>
-                  <InfoLabel>Localisation</InfoLabel>
-                  <InfoValue>{portfolioData.personal.location}</InfoValue>
-                </InfoText>
-              </InfoItem>
-            </InfoCard>
-
-            <Card variant="glass">
-              <h4 style={{ marginBottom: theme.spacing['4'], color: theme.colors.white }}>
-                Réponse sous 24h
-              </h4>
-              <p style={{ color: theme.colors.gray400 }}>
-                Je m'engage à répondre rapidement à toutes les demandes sérieuses
-                de collaboration sur des projets innovants.
-              </p>
-            </Card>
-          </ContactInfo>
 
           <FormContainer
             initial={{ opacity: 0, x: 30 }}
@@ -339,59 +283,32 @@ const Contact: React.FC = () => {
           >
             <Card variant="default">
               <Form onSubmit={handleSubmit}>
-                <FormRow>
-                  <FormGroup>
-                    <Label htmlFor="name">Nom complet</Label>
-                    <Input
-                      type="text"
-                      id="name"
-                      name="name"
-                      placeholder="John Doe"
-                      value={formData.name}
-                      onChange={handleChange}
-                      required
-                    />
-                  </FormGroup>
+                <FormGroup>
+                  <Label htmlFor="name">Nom</Label>
+                  <Input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Votre nom"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                  />
+                </FormGroup>
 
-                  <FormGroup>
-                    <Label htmlFor="email">Email</Label>
-                    <Input
-                      type="email"
-                      id="email"
-                      name="email"
-                      placeholder="john@company.com"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                    />
-                  </FormGroup>
-                </FormRow>
+                <FormGroup>
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="votre@email.com"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                  />
+                </FormGroup>
 
-                <FormRow>
-                  <FormGroup>
-                    <Label htmlFor="company">Entreprise</Label>
-                    <Input
-                      type="text"
-                      id="company"
-                      name="company"
-                      placeholder="Startup AI"
-                      value={formData.company}
-                      onChange={handleChange}
-                    />
-                  </FormGroup>
-
-                  <FormGroup>
-                    <Label htmlFor="budget">Budget estimé</Label>
-                    <Input
-                      type="text"
-                      id="budget"
-                      name="budget"
-                      placeholder="5k - 10k €"
-                      value={formData.budget}
-                      onChange={handleChange}
-                    />
-                  </FormGroup>
-                </FormRow>
 
                 <FormGroup>
                   <Label htmlFor="message">Message</Label>
@@ -411,8 +328,9 @@ const Contact: React.FC = () => {
                   size="lg"
                   fullWidth
                   icon={<FiSend />}
+                  disabled={isSubmitting}
                 >
-                  Envoyer le message
+                  {isSubmitting ? 'Envoi en cours...' : 'Envoyer le message'}
                 </Button>
               </Form>
             </Card>
@@ -435,6 +353,22 @@ const Contact: React.FC = () => {
           </Button>
         </CTASection>
       </Container>
+
+      {/* Notification */}
+      <AnimatePresence>
+        {notification.show && (
+          <Notification
+            type={notification.type}
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 100 }}
+            transition={{ duration: 0.3 }}
+          >
+            {notification.type === 'success' ? <FiCheck /> : <FiAlertCircle />}
+            {notification.message}
+          </Notification>
+        )}
+      </AnimatePresence>
     </ContactSection>
   );
 };

@@ -38,7 +38,7 @@ const SectionTitle = styled(motion.h2)`
 const ContentGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 2fr;
-  gap: ${theme.spacing['12']};
+  gap: ${theme.spacing['16']};
   margin-bottom: ${theme.spacing['16']};
 
   @media (max-width: ${theme.breakpoints.lg}) {
@@ -106,6 +106,7 @@ const Tab = styled.button<{ active: boolean }>`
 
 const TabContent = styled(motion.div)`
   min-height: 400px;
+  padding: ${theme.spacing['4']} 0;
 `;
 
 const Timeline = styled.div`
@@ -125,12 +126,15 @@ const Timeline = styled.div`
 
 const TimelineItem = styled(motion.div)`
   position: relative;
-  margin-bottom: ${theme.spacing['8']};
+  margin-bottom: ${theme.spacing['10']};
+  padding: ${theme.spacing['4']};
+  background: ${theme.colors.gray900};
+  border-radius: ${theme.borderRadius.lg};
 
   &::before {
     content: '';
     position: absolute;
-    left: -33px;
+    left: -37px;
     top: 8px;
     width: 10px;
     height: 10px;
@@ -251,9 +255,9 @@ const About: React.FC = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               viewport={{ once: true }}
             >
-              Passionnée par le design et l'innovation, je crée des expériences
-              utilisateur qui allient esthétique et fonctionnalité, avec une
-              expertise particulière dans les produits IA.
+              Product Designer spécialisée en gestion produit et expériences IA.
+              Je transforme des concepts complexes en interfaces intuitives qui
+              ravissent les utilisateurs et génèrent des résultats business.
             </BioText>
 
             <Card variant="glass">
@@ -262,7 +266,14 @@ const About: React.FC = () => {
                 Langues
               </h4>
               <div style={{ display: 'flex', flexDirection: 'column', gap: theme.spacing['3'] }}>
-                {portfolioData.languages.map(lang => (
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: theme.colors.gray300, fontWeight: theme.fontWeights.semibold }}>Anglais</span>
+                  <div style={{ display: 'flex', gap: theme.spacing['2'], alignItems: 'center' }}>
+                    <Badge size="sm" variant="primary">Professionnel</Badge>
+                    <Badge size="sm" variant="outline">TOEIC 920</Badge>
+                  </div>
+                </div>
+                {portfolioData.languages.filter(lang => lang.name !== 'Anglais').map(lang => (
                   <div key={lang.name} style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <span style={{ color: theme.colors.gray300 }}>{lang.name}</span>
                     <Badge size="sm" variant="outline">{lang.proficiency}</Badge>

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { FiLinkedin, FiMail, FiGithub, FiArrowUp } from 'react-icons/fi';
+import { FiLinkedin, FiMail, FiArrowUp } from 'react-icons/fi';
 import { theme } from '../../styles/theme';
 import { portfolioData } from '../../data/portfolio';
 
@@ -185,15 +185,6 @@ const Footer: React.FC = () => {
                 whileTap={{ scale: 0.9 }}
               >
                 <FiMail />
-              </SocialLink>
-              <SocialLink
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ y: -4 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <FiGithub />
               </SocialLink>
             </SocialLinks>
           </BrandSection>
