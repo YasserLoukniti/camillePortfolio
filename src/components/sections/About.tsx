@@ -203,117 +203,99 @@ const TimelineButton = styled(motion.button)<{ $active: boolean }>`
 const TimelineContent = styled(AnimatePresence)``;
 
 const ExperienceGrid = styled(motion.div)`
-  display: grid;
-  gap: ${theme.spacing['4']};
+  position: relative;
+  padding: ${theme.spacing['8']} 0;
 `;
 
-const ExperienceItem = styled(motion.div)`
+const ExperienceItem = styled(motion.div)<{ $index: number }>`
   position: relative;
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: ${theme.spacing['8']};
+  margin-bottom: ${theme.spacing['10']};
+  display: flex;
+  justify-content: center;
+`;
+
+const ExperienceCardWrapper = styled.div<{ $index: number }>`
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+
+  @media (max-width: ${theme.breakpoints.md}) {
+    width: 95%;
+  }
+`;
+
+const ExperienceCard = styled(motion.div)<{ $index: number }>`
+  background: rgba(255, 255, 255, 0.01);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 24px;
   padding: ${theme.spacing['8']};
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
   &::before {
     content: '';
     position: absolute;
-    left: 232px;
     top: 0;
-    bottom: 0;
-    width: 2px;
+    left: 0;
+    right: 0;
+    height: 3px;
     background: linear-gradient(
-      180deg,
-      transparent 0%,
-      ${theme.colors.violet} 20%,
-      ${theme.colors.orange} 50%,
-      ${theme.colors.violet} 80%,
-      transparent 100%
+      90deg,
+      ${props => props.$index % 2 === 0
+        ? theme.colors.violet
+        : theme.colors.orange},
+      ${props => props.$index % 2 === 0
+        ? theme.colors.orange
+        : theme.colors.violet}
     );
-    opacity: 0.3;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
   }
 
-  @media (max-width: ${theme.breakpoints.md}) {
-    grid-template-columns: 1fr;
-    gap: ${theme.spacing['4']};
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    background: linear-gradient(
+      135deg,
+      ${props => props.$index % 2 === 0
+        ? 'rgba(139, 92, 246, 0.3)'
+        : 'rgba(251, 146, 60, 0.3)'},
+      transparent 50%
+    );
+    border-radius: 24px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+  }
+
+  &:hover {
+    transform: translateY(-8px) scale(1.02);
+    border-color: ${props => props.$index % 2 === 0
+      ? 'rgba(139, 92, 246, 0.3)'
+      : 'rgba(251, 146, 60, 0.3)'};
+    box-shadow:
+      0 20px 40px rgba(0, 0, 0, 0.2),
+      0 0 60px ${props => props.$index % 2 === 0
+        ? 'rgba(139, 92, 246, 0.15)'
+        : 'rgba(251, 146, 60, 0.15)'};
 
     &::before {
-      display: none;
+      transform: scaleX(1);
+    }
+
+    &::after {
+      opacity: 1;
     }
   }
 `;
 
-const DateBadge = styled.div`
-  text-align: right;
-
-  @media (max-width: ${theme.breakpoints.md}) {
-    text-align: left;
-  }
-`;
-
-const DateText = styled.div`
-  font-size: ${theme.fontSizes.sm};
-  color: ${theme.colors.violet};
-  font-weight: ${theme.fontWeights.semibold};
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: ${theme.spacing['2']};
-`;
-
-const LocationText = styled.div`
-  font-size: ${theme.fontSizes.xs};
-  color: ${theme.colors.gray500};
-  display: flex;
-  align-items: center;
-  gap: ${theme.spacing['1']};
-  justify-content: flex-end;
-
-  @media (max-width: ${theme.breakpoints.md}) {
-    justify-content: flex-start;
-  }
-`;
-
-const ExperienceDetails = styled.div`
-  position: relative;
-`;
-
-const ExperienceCard = styled.div`
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.02) 0%,
-    rgba(139, 92, 246, 0.02) 100%
-  );
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 20px;
-  padding: ${theme.spacing['6']};
-  position: relative;
-  overflow: hidden;
-  transition: all 0.4s ease;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(139, 92, 246, 0.1),
-      transparent
-    );
-    transition: left 0.5s ease;
-  }
-
-  &:hover::before {
-    left: 100%;
-  }
-
-  &:hover {
-    transform: translateX(10px);
-    border-color: rgba(139, 92, 246, 0.2);
-  }
+const ExperienceHeader = styled.div`
+  margin-bottom: ${theme.spacing['6']};
 `;
 
 const ExperienceTitle = styled.h3`
@@ -321,20 +303,41 @@ const ExperienceTitle = styled.h3`
   font-weight: ${theme.fontWeights.bold};
   color: ${theme.colors.white};
   margin-bottom: ${theme.spacing['2']};
+  letter-spacing: -0.02em;
 `;
 
 const ExperienceCompany = styled.div`
-  font-size: ${theme.fontSizes.lg};
+  display: flex;
+  align-items: center;
+  gap: ${theme.spacing['3']};
+  font-size: ${theme.fontSizes.md};
   color: ${theme.colors.gray400};
-  margin-bottom: ${theme.spacing['4']};
   font-weight: ${theme.fontWeights.light};
+
+  span:first-child {
+    color: ${theme.colors.violet};
+    font-weight: ${theme.fontWeights.medium};
+  }
+
+  &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      rgba(139, 92, 246, 0.3),
+      transparent
+    );
+    max-width: 100px;
+  }
 `;
 
 const ExperienceDescription = styled.p`
   font-size: ${theme.fontSizes.md};
   color: ${theme.colors.gray300};
   line-height: 1.8;
-  margin-bottom: ${theme.spacing['4']};
+  margin-bottom: ${theme.spacing['6']};
+  padding-right: ${theme.spacing['12']};
 `;
 
 const SkillPills = styled.div`
@@ -343,29 +346,25 @@ const SkillPills = styled.div`
   gap: ${theme.spacing['2']};
 `;
 
-const SkillPill = styled.span`
+const SkillPill = styled(motion.span)<{ $delay: number }>`
   display: inline-flex;
   align-items: center;
-  gap: ${theme.spacing['1']};
-  padding: ${theme.spacing['1']} ${theme.spacing['3']};
-  background: rgba(139, 92, 246, 0.1);
-  border: 1px solid rgba(139, 92, 246, 0.2);
-  border-radius: 100px;
+  padding: ${theme.spacing['1.5']} ${theme.spacing['3']};
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
   font-size: ${theme.fontSizes.xs};
-  color: ${theme.colors.violet};
+  color: ${theme.colors.gray400};
   font-weight: ${theme.fontWeights.medium};
   position: relative;
   overflow: hidden;
+  transition: all 0.3s ease;
 
-  &::before {
-    content: '✨';
-    position: absolute;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  &:hover::before {
-    opacity: 1;
+  &:hover {
+    background: rgba(139, 92, 246, 0.1);
+    border-color: rgba(139, 92, 246, 0.3);
+    color: ${theme.colors.violet};
+    transform: translateY(-2px);
   }
 `;
 
@@ -428,38 +427,63 @@ const StatLabel = styled.div`
 
 const LanguageSection = styled.div`
   margin-top: ${theme.spacing['16']};
-  display: flex;
-  justify-content: center;
-  gap: ${theme.spacing['8']};
-  flex-wrap: wrap;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
 `;
 
-const LanguageBubble = styled(motion.div)`
-  position: relative;
-  padding: ${theme.spacing['3']} ${theme.spacing['6']};
+const LanguageGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: ${theme.spacing['4']};
+`;
+
+const LanguageCard = styled(motion.div)`
+  padding: ${theme.spacing['5']};
   background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 100px;
-  font-size: ${theme.fontSizes.md};
-  color: ${theme.colors.white};
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
   transition: all 0.3s ease;
 
-  &::after {
-    content: attr(data-level);
+  &::before {
+    content: '';
     position: absolute;
-    top: -10px;
-    right: -10px;
-    padding: ${theme.spacing['1']} ${theme.spacing['2']};
-    background: linear-gradient(135deg, ${theme.colors.violet}, ${theme.colors.orange});
-    border-radius: 100px;
-    font-size: ${theme.fontSizes.xs};
-    font-weight: ${theme.fontWeights.bold};
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, ${theme.colors.violet}, ${theme.colors.orange});
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
   }
 
   &:hover {
-    transform: scale(1.1) rotate(-5deg);
-    border-color: rgba(139, 92, 246, 0.3);
+    transform: translateY(-4px);
+    border-color: rgba(139, 92, 246, 0.2);
+    background: rgba(255, 255, 255, 0.03);
+
+    &::before {
+      transform: scaleX(1);
+    }
   }
+`;
+
+const LanguageName = styled.div`
+  font-size: ${theme.fontSizes.lg};
+  font-weight: ${theme.fontWeights.semibold};
+  color: ${theme.colors.white};
+  margin-bottom: ${theme.spacing['2']};
+`;
+
+const LanguageLevel = styled.div`
+  font-size: ${theme.fontSizes.sm};
+  color: ${theme.colors.violet};
+  opacity: 0.8;
 `;
 
 const About: React.FC = () => {
@@ -468,14 +492,14 @@ const About: React.FC = () => {
   const categories = [
     { id: 'experience', label: 'Expériences', icon: FiBriefcase },
     { id: 'education', label: 'Formation', icon: HiAcademicCap },
-    { id: 'skills', label: 'Compétences', icon: FiCode },
+    { id: 'certifications', label: 'Certifications', icon: FiAward },
   ];
 
   const stats = [
-    { number: '5+', label: "Années", icon: FiTrendingUp },
-    { number: '20+', label: 'Projets', icon: FiTarget },
-    { number: '120+', label: 'MVP Testés', icon: FiZap },
-    { number: '3M€', label: 'Levés', icon: FiAward },
+    { number: '4', label: "Ans d'expérience", icon: FiTrendingUp },
+    { number: '5', label: 'Projets', icon: FiTarget },
+    { number: '4', label: 'Startups', icon: FiZap },
+    { number: '3', label: 'Projets IA', icon: FiAward },
   ];
 
   return (
@@ -543,32 +567,52 @@ const About: React.FC = () => {
                 {portfolioData.experiences.map((exp, index) => (
                   <ExperienceItem
                     key={index}
+                    $index={index}
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
+                    transition={{
+                      delay: index * 0.2,
+                      duration: 0.6,
+                      ease: "easeOut"
+                    }}
                   >
-                    <DateBadge>
-                      <DateText>{exp.dateRange}</DateText>
-                      <LocationText>
-                        <FiMapPin size={12} />
-                        {exp.location || 'Paris'}
-                      </LocationText>
-                    </DateBadge>
+                    <ExperienceCardWrapper $index={index}>
+                      <ExperienceCard
+                        $index={index}
+                        whileHover={{ scale: 1.01 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <ExperienceHeader>
+                          <ExperienceTitle>{exp.title}</ExperienceTitle>
+                          <ExperienceCompany>
+                            <span>{exp.company}</span>
+                            <span>{exp.dateRange}</span>
+                          </ExperienceCompany>
+                        </ExperienceHeader>
 
-                    <ExperienceDetails>
-                      <ExperienceCard>
-                        <ExperienceTitle>{exp.title}</ExperienceTitle>
-                        <ExperienceCompany>{exp.company}</ExperienceCompany>
                         <ExperienceDescription>
                           {exp.description}
                         </ExperienceDescription>
+
                         <SkillPills>
-                          {exp.skills.slice(0, 4).map((skill) => (
-                            <SkillPill key={skill}>{skill}</SkillPill>
+                          {exp.skills.slice(0, 5).map((skill, i) => (
+                            <SkillPill
+                              key={skill}
+                              $delay={i * 0.1}
+                              initial={{ opacity: 0, scale: 0.8 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              transition={{
+                                delay: index * 0.2 + i * 0.05,
+                                duration: 0.3
+                              }}
+                              whileHover={{ scale: 1.05 }}
+                            >
+                              {skill}
+                            </SkillPill>
                           ))}
                         </SkillPills>
                       </ExperienceCard>
-                    </ExperienceDetails>
+                    </ExperienceCardWrapper>
                   </ExperienceItem>
                 ))}
               </ExperienceGrid>
@@ -584,95 +628,77 @@ const About: React.FC = () => {
                 {portfolioData.education.map((edu, index) => (
                   <ExperienceItem
                     key={index}
+                    $index={index}
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
+                    transition={{
+                      delay: index * 0.2,
+                      duration: 0.6,
+                      ease: "easeOut"
+                    }}
                   >
-                    <DateBadge>
-                      <DateText>{edu.dateRange}</DateText>
-                      <LocationText>
-                        <HiAcademicCap size={12} />
-                        Formation
-                      </LocationText>
-                    </DateBadge>
-
-                    <ExperienceDetails>
-                      <ExperienceCard>
-                        <ExperienceTitle>{edu.degree}</ExperienceTitle>
-                        <ExperienceCompany>{edu.school}</ExperienceCompany>
-                        <ExperienceDescription>
-                          {edu.field}
-                        </ExperienceDescription>
+                    <ExperienceCardWrapper $index={index}>
+                      <ExperienceCard
+                        $index={index}
+                        whileHover={{ scale: 1.01 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <ExperienceHeader>
+                          <ExperienceTitle>{edu.degree}</ExperienceTitle>
+                          <ExperienceCompany>
+                            <span>{edu.school}</span>
+                            <span>{edu.dateRange}</span>
+                          </ExperienceCompany>
+                        </ExperienceHeader>
                       </ExperienceCard>
-                    </ExperienceDetails>
+                    </ExperienceCardWrapper>
                   </ExperienceItem>
                 ))}
               </ExperienceGrid>
             )}
 
-            {activeCategory === 'skills' && (
+            {activeCategory === 'certifications' && (
               <ExperienceGrid
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 50 }}
                 transition={{ duration: 0.5 }}
               >
-                <div style={{
-                  display: 'grid',
-                  gap: theme.spacing['8'],
-                  textAlign: 'center',
-                  padding: theme.spacing['8']
-                }}>
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5 }}
+                {portfolioData.certifications.map((cert, index) => (
+                  <ExperienceItem
+                    key={index}
+                    $index={index}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      delay: index * 0.2,
+                      duration: 0.6,
+                      ease: "easeOut"
+                    }}
                   >
-                    <h3 style={{
-                      fontSize: theme.fontSizes['3xl'],
-                      marginBottom: theme.spacing['6'],
-                      background: 'linear-gradient(135deg, #8B5CF6, #FB923C)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent'
-                    }}>
-                      Expertise Multi-disciplinaire
-                    </h3>
-                    <div style={{
-                      display: 'flex',
-                      flexWrap: 'wrap',
-                      gap: theme.spacing['4'],
-                      justifyContent: 'center',
-                      maxWidth: '800px',
-                      margin: '0 auto'
-                    }}>
-                      {['Design Systems', 'User Research', 'Prototypage', 'IA & ML',
-                        'Product Strategy', 'Design Thinking', 'Figma', 'React',
-                        'Analytics', 'A/B Testing', 'Agile', 'Leadership'].map((skill, i) => (
-                        <motion.div
-                          key={skill}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: i * 0.05 }}
-                          whileHover={{ scale: 1.1, rotate: Math.random() * 10 - 5 }}
-                          style={{
-                            padding: `${theme.spacing['3']} ${theme.spacing['6']}`,
-                            background: `linear-gradient(135deg,
-                              rgba(139, 92, 246, ${0.1 + Math.random() * 0.1}),
-                              rgba(251, 146, 60, ${0.1 + Math.random() * 0.1}))`,
-                            border: '1px solid rgba(255, 255, 255, 0.1)',
-                            borderRadius: '100px',
-                            color: theme.colors.white,
-                            fontSize: theme.fontSizes.sm,
-                            fontWeight: theme.fontWeights.medium,
-                            cursor: 'pointer'
-                          }}
-                        >
-                          {skill}
-                        </motion.div>
-                      ))}
-                    </div>
-                  </motion.div>
-                </div>
+                    <ExperienceCardWrapper $index={index}>
+                      <ExperienceCard
+                        $index={index}
+                        whileHover={{ scale: 1.01 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <ExperienceHeader>
+                          <ExperienceTitle>{cert.name}</ExperienceTitle>
+                          <ExperienceCompany>
+                            <span>{cert.authority}</span>
+                            <span>{cert.issued}</span>
+                          </ExperienceCompany>
+                        </ExperienceHeader>
+
+                        {cert.description && (
+                          <ExperienceDescription>
+                            {cert.description}
+                          </ExperienceDescription>
+                        )}
+                      </ExperienceCard>
+                    </ExperienceCardWrapper>
+                  </ExperienceItem>
+                ))}
               </ExperienceGrid>
             )}
           </TimelineContent>
@@ -708,23 +734,39 @@ const About: React.FC = () => {
         </StatsSection>
 
         <LanguageSection>
-          {portfolioData.languages.map((lang, index) => (
-            <LanguageBubble
-              key={lang.name}
-              data-level={lang.proficiency}
-              initial={{ opacity: 0, scale: 0 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{
-                duration: 0.5,
-                delay: index * 0.1,
-                type: "spring"
-              }}
-              viewport={{ once: true }}
-              whileHover={{ scale: 1.1, rotate: -5 }}
-            >
-              {lang.name}
-            </LanguageBubble>
-          ))}
+          <motion.h3
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+            style={{
+              textAlign: 'center',
+              fontSize: theme.fontSizes['2xl'],
+              fontWeight: theme.fontWeights.semibold,
+              marginBottom: theme.spacing['8'],
+              color: theme.colors.white
+            }}
+          >
+            Langues
+          </motion.h3>
+          <LanguageGrid>
+            {portfolioData.languages.map((lang, index) => (
+              <LanguageCard
+                key={lang.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.5,
+                  delay: index * 0.1
+                }}
+                viewport={{ once: true }}
+                whileHover={{ scale: 1.02 }}
+              >
+                <LanguageName>{lang.name}</LanguageName>
+                <LanguageLevel>{lang.proficiency}</LanguageLevel>
+              </LanguageCard>
+            ))}
+          </LanguageGrid>
         </LanguageSection>
       </Container>
     </AboutSection>

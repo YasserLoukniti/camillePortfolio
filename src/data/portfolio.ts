@@ -258,21 +258,21 @@ export const portfolioData = {
   education: [
     {
       school: "University of Montpellier",
-      degree: "Master Marketing",
+      degree: "Master Marketing et Innovation",
       field: "Marketing",
       dateRange: "2021 - 2023",
       logo: "https://media.licdn.com/dms/image/v2/D4E0BAQFlLO95DxW91g/company-logo_200_200/company-logo_200_200/0/1700230998634/universite_de_montpellier_logo?e=1760572800&v=beta&t=t1RjNJ6K11aW65l9msqT2oUn6SmZfoinlc13kLNOzAo"
     },
     {
       school: "University of Montpellier",
-      degree: "Diplôme Création de site web",
-      field: "Design de pages Web",
+      degree: "Diplôme Création de Site Web et Gestion de Projet IT",
+      field: "Création d'un site d'agence de communication, tests utilisateur, développement HTML/CSS et WordPress, méthodologie projet web",
       dateRange: "2021 - 2022",
       logo: "https://media.licdn.com/dms/image/v2/D4E0BAQFlLO95DxW91g/company-logo_200_200/company-logo_200_200/0/1700230998634/universite_de_montpellier_logo?e=1760572800&v=beta&t=t1RjNJ6K11aW65l9msqT2oUn6SmZfoinlc13kLNOzAo"
     },
     {
-      school: "Université de Sherbrooke",
-      degree: "Baccalauréat",
+      school: "Université de Sherbrooke (Canada)",
+      degree: "Certification Business Management",
       field: "Administration des affaires",
       dateRange: "2019 - 2020",
       logo: "https://media.licdn.com/dms/image/v2/C560BAQHPmp1zHRMp8Q/company-logo_200_200/company-logo_200_200/0/1633543567623/universite_de_sherbrooke_logo?e=1760572800&v=beta&t=lnjDR3PvgVbHrBrW3hG8ozDyVIV8ahMfiJ_DYOf7bSs"
