@@ -114,6 +114,18 @@ export const portfolioData = {
         {
           name: "Dashboard Analytics & Gestion RH",
           description: "Dashboard analytics complet avec analyse poussée du candidat depuis son interview IA"
+        },
+        {
+          name: "Humaniser l'IA",
+          description: "Automatiser la préqualification RH sans froideur technologique. Interfaces colorées et visuelles, messagerie directe, conseils personnalisés, transparence totale et contact humain à tout moment"
+        },
+        {
+          name: "Innovation UX",
+          description: "Agent conversationnel, système de widgets modulaires, calendrier inversé permettant aux candidats de prendre rendez-vous directement dans les disponibilités des recruteurs"
+        },
+        {
+          name: "Product Market Fit dans l'IA B2B",
+          description: "Intégration dans le workflow RH, roadmap et priorisation, coordination avec 4 développeurs, écriture des vidéos de promotion et arguments de démo, cohérence visuelle et storytelling produit"
         }
       ]
     },

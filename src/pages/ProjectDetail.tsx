@@ -1204,7 +1204,7 @@ const ProjectDetail: React.FC = () => {
             </StoryTitle>
             <StoryText>
               {project.id === 1
-                ? "Une expérience d'onboarding magique où l'IA génère un profil complet en secondes et permet de créer des expériences rapides. Des widgets modulaires personnalisables, un système de matching intelligent offre-candidat, des interviews IA automatisées, et un dashboard analytics pour une analyse approfondie des candidats."
+                ? "Une expérience du recrutement complètement différente des outils RH habituels, avec une IA intégrée dans plusieurs fonctionnalités : onboarding, interview, personnalisation du profil, etc. Le tout dans un design \"bento\" moderne et innovant pour des usages encore nouveaux pour les utilisateurs."
                 : project.id === 2
                 ? "Création d'un écosystème UX complet : de la recherche utilisateur à l'interface scalable, en passant par l'implémentation du premier processus centré utilisateur de l'entreprise."
                 : "Un système de recommandations intelligent, une interface moderne et engageante, et des outils de suivi de progression pour accompagner chaque étape du parcours."
