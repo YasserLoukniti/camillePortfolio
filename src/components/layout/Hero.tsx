@@ -208,8 +208,9 @@ const TypewriterText = styled.span`
     content: '|';
     position: absolute;
     right: -10px;
-    animation: blink 1s step-end infinite;
+    animation: blink 0.5s step-end infinite;
     color: ${theme.colors.violet};
+    opacity: 0.8;
   }
 
   @keyframes blink {
@@ -235,7 +236,7 @@ const Hero: React.FC = () => {
       } else {
         clearInterval(timer);
       }
-    }, 100);
+    }, 30); // Beaucoup plus rapide : 30ms au lieu de 100ms
 
     return () => clearInterval(timer);
   }, []);

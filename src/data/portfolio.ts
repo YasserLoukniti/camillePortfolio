@@ -125,7 +125,7 @@ export const portfolioData = {
       company: "EDF Agregio-Solutions",
       role: "Chargée design et communication",
       dateRange: "Septembre 2022 - Septembre 2023",
-      description: "Filiale EDF - Solutions Énergétiques B2B. Seule UX/UI Designer d'une plateforme SaaS de gestion énergétique industrielle.",
+      description: "Design d'une plateforme SaaS de gestion énergétique et d'une application B2B de calcul ROI pour projets énergétiques. Standardisation de produits les rendant scalables.",
       shortDescription: "Gestion énergétique B2B",
       image: "/projects/edf/edf-connexion.png",
       galleries: [
@@ -222,6 +222,10 @@ export const portfolioData = {
         {
           name: "User Research",
           description: "Research approfondi auprès des demandeurs d'emploi pour validation concept"
+        },
+        {
+          name: "Accessibilité et inclusion",
+          description: "Conception d'interfaces accessibles WCAG pour garantir l'inclusion de tous les publics"
         }
       ]
     }

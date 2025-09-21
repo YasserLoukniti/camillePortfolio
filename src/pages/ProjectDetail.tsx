@@ -725,6 +725,7 @@ const FeatureItem = styled(motion.div)`
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
+  text-align: center;
 
   &::before {
     content: '';
@@ -758,6 +759,7 @@ const FeatureTitle = styled.h4`
   font-weight: 600;
   color: #fff;
   margin: 0 0 10px 0;
+  text-align: center;
 `;
 
 const FeatureDesc = styled.p`
@@ -765,6 +767,7 @@ const FeatureDesc = styled.p`
   color: ${theme.colors.gray400};
   line-height: 1.6;
   margin: 0;
+  text-align: center;
 `;
 
 // ========= LIGHTBOX =========
