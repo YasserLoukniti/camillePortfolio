@@ -1,253 +1,656 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiArrowLeft, FiX } from 'react-icons/fi';
-import { HiArrowLeft, HiArrowRight } from 'react-icons/hi';
+import { FiArrowLeft, FiX, FiChevronLeft, FiChevronRight, FiMaximize2, FiAward, FiTarget, FiZap } from 'react-icons/fi';
+import { HiOutlineSparkles } from 'react-icons/hi';
 import { theme } from '../styles/theme';
 import { portfolioData } from '../data/portfolio';
 
-// ===== CONTAINER PRINCIPAL =====
-const PageWrapper = styled.div`
+// ========= MAIN CONTAINER =========
+const PageContainer = styled.div`
   width: 100%;
   min-height: 100vh;
-  background: #000000;
+  background: linear-gradient(180deg, #000000 0%, #0a0a0a 100%);
 `;
 
-// ===== HEADER ULTRA MINIMAL =====
-const MinimalHeader = styled.div`
-  position: sticky;
+// ========= NAVIGATION BAR =========
+const NavBar = styled.div`
+  position: fixed;
   top: 0;
-  width: 100%;
-  height: 60px;
-  background: rgba(0, 0, 0, 0.98);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  padding: 0 30px;
-`;
-
-const HeaderContent = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 24px;
-`;
-
-const BackButtonSmall = styled.button`
-  background: none;
-  border: none;
-  color: #808080;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  cursor: pointer;
-  padding: 0;
-  transition: color 0.2s;
-
-  &:hover {
-    color: #ffffff;
-  }
-
-  svg {
-    width: 16px;
-    height: 16px;
-  }
-`;
-
-const TitleGroup = styled.div`
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-  flex: 1;
-`;
-
-const ProjectTitle = styled.h1`
-  font-size: 15px;
-  font-weight: 600;
-  color: #ffffff;
-  margin: 0;
-`;
-
-const ProjectDate = styled.span`
-  font-size: 12px;
-  color: #606060;
-`;
-
-const ProjectDesc = styled.span`
-  font-size: 12px;
-  color: #808080;
-  max-width: 350px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-const TagsRow = styled.div`
-  display: flex;
-  gap: 8px;
-`;
-
-const SmallTag = styled.div`
-  padding: 4px 10px;
-  border-radius: 10px;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  background: ${props => {
-    if (props.children === 'Product Design') return 'rgba(255, 140, 90, 0.15)';
-    if (props.children === 'Mobile Design') return 'rgba(236, 72, 153, 0.15)';
-    return 'rgba(255, 182, 193, 0.15)';
-  }};
-  color: ${props => {
-    if (props.children === 'Product Design') return 'rgb(255, 140, 90)';
-    if (props.children === 'Mobile Design') return 'rgb(236, 72, 153)';
-    return 'rgb(255, 182, 193)';
-  }};
-`;
-
-// ===== SECTION IMAGES GRANDES =====
-const ImagesSection = styled.div`
-  width: 100%;
-  padding: 20px;
-`;
-
-const ImagesGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
-  max-width: 1400px;
-  margin: 0 auto;
-`;
-
-const BigImageCard = styled(motion.div)`
-  width: 100%;
-  position: relative;
-  cursor: pointer;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #0a0a0a;
-
-  &:hover img {
-    transform: scale(1.02);
-  }
-`;
-
-const BigImage = styled.img`
-  width: 100%;
-  height: auto;
-  display: block;
-  transition: transform 0.4s ease;
-`;
-
-const ImageOverlay = styled.div`
-  position: absolute;
-  bottom: 0;
   left: 0;
   right: 0;
-  padding: 20px;
-  background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
-  color: white;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.3s ease;
+  height: 72px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+`;
 
-  ${BigImageCard}:hover & {
-    opacity: 1;
-    transform: translateY(0);
+const NavContent = styled.div`
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  @media (max-width: 768px) {
+    padding: 0 20px;
   }
 `;
 
-const ImageTitle = styled.p`
+const BackButton = styled(motion.button)`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 100px;
+  color: ${theme.colors.white};
   font-size: 14px;
-  font-weight: 500;
-  margin: 0;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  svg {
+    transition: transform 0.3s ease;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateX(-2px);
+
+    svg {
+      transform: translateX(-4px);
+    }
+  }
 `;
 
-// ===== IMPACTS FLOTTANTS =====
-const FloatingMetrics = styled(motion.div)`
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  background: rgba(0, 0, 0, 0.95);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  padding: 16px 24px;
+const NavTags = styled.div`
   display: flex;
-  gap: 30px;
-  z-index: 50;
+  gap: 8px;
 
   @media (max-width: 768px) {
     display: none;
   }
 `;
 
-const MetricBlock = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
+const NavTag = styled.span<{ $color: string }>`
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  background: ${props =>
+    props.$color === 'orange' ? 'rgba(255, 140, 90, 0.1)' :
+    props.$color === 'pink' ? 'rgba(236, 72, 153, 0.1)' :
+    'rgba(139, 92, 246, 0.1)'
+  };
+  color: ${props =>
+    props.$color === 'orange' ? '#ff8c5a' :
+    props.$color === 'pink' ? '#ec4899' :
+    '#8b5cf6'
+  };
+  border: 1px solid ${props =>
+    props.$color === 'orange' ? 'rgba(255, 140, 90, 0.2)' :
+    props.$color === 'pink' ? 'rgba(236, 72, 153, 0.2)' :
+    'rgba(139, 92, 246, 0.2)'
+  };
 `;
 
-const MetricValue = styled.div`
-  font-size: 18px;
+// ========= HERO SECTION =========
+const HeroSection = styled.div`
+  padding: 140px 40px 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  @media (max-width: 768px) {
+    padding: 100px 20px 40px;
+  }
+`;
+
+const ProjectHeader = styled.div`
+  text-align: center;
+  margin-bottom: 60px;
+`;
+
+const ProjectTitle = styled(motion.h1)`
+  font-size: clamp(32px, 4vw, 48px);
   font-weight: 700;
-  background: linear-gradient(135deg, #FB923C 0%, #EC4899 100%);
+  margin: 0 0 20px 0;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  background: linear-gradient(135deg,
+    ${theme.colors.white} 0%,
+    rgba(255, 140, 90, 0.9) 100%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
+`;
+
+const ProjectSubtitle = styled(motion.p)`
+  font-size: 18px;
+  color: ${theme.colors.gray300};
+  margin: 0 auto 28px;
+  max-width: 650px;
+  line-height: 1.6;
+  font-weight: 300;
+`;
+
+const MetaInfo = styled(motion.div)`
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  margin-bottom: 48px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+  }
+`;
+
+const MetaItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 100px;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    color: #ff8c5a;
+  }
+
+  strong {
+    color: ${theme.colors.white};
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  span {
+    color: ${theme.colors.gray400};
+    font-size: 13px;
+  }
+`;
+
+// ========= METRICS SECTION =========
+const MetricsSection = styled(motion.div)`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+  margin-bottom: 80px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  perspective: 1000px;
+`;
+
+const MetricCard = styled(motion.div)`
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 24px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg,
+      rgba(255, 140, 90, 0) 0%,
+      rgba(255, 140, 90, 0.8) 50%,
+      rgba(236, 72, 153, 0) 100%
+    );
+    transform: scaleX(0);
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      circle at center,
+      rgba(255, 140, 90, 0.1) 0%,
+      transparent 70%
+    );
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &:hover {
+    transform: translateY(-8px) scale(1.02);
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 140, 90, 0.4);
+    box-shadow:
+      0 20px 40px rgba(255, 140, 90, 0.2),
+      0 0 60px rgba(255, 140, 90, 0.1),
+      inset 0 0 30px rgba(255, 140, 90, 0.05);
+
+    &::before {
+      transform: scaleX(1);
+    }
+
+    &::after {
+      opacity: 1;
+      transform: scale(1.5);
+    }
+  }
+`;
+
+const MetricIcon = styled(motion.div)`
+  width: 40px;
+  height: 40px;
+  margin: 0 auto 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 140, 90, 0.1);
+  border-radius: 12px;
+  position: relative;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    color: #ff8c5a;
+    z-index: 1;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(45deg,
+      #ff8c5a,
+      #ec4899,
+      #8b5cf6
+    );
+    border-radius: 12px;
+    opacity: 0;
+    filter: blur(8px);
+    transition: opacity 0.4s ease;
+  }
+
+  ${MetricCard}:hover & {
+    animation: pulse 2s infinite;
+
+    &::after {
+      opacity: 0.6;
+    }
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+`;
+
+const MetricValue = styled(motion.div)`
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  background: linear-gradient(135deg,
+    ${theme.colors.white} 0%,
+    rgba(255, 140, 90, 0.9) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+  display: inline-block;
+
+  ${MetricCard}:hover & {
+    animation: countUp 0.6s ease-out;
+    background: linear-gradient(135deg,
+      #ff8c5a 0%,
+      #ec4899 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  @keyframes countUp {
+    0% {
+      transform: scale(0.8) translateY(10px);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.1) translateY(-5px);
+    }
+    100% {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+  }
 `;
 
 const MetricLabel = styled.div`
-  font-size: 10px;
-  color: #606060;
+  font-size: 12px;
+  color: ${theme.colors.gray400};
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.2px;
+  font-weight: 600;
+  opacity: 0.8;
+  transition: all 0.3s ease;
+
+  ${MetricCard}:hover & {
+    color: ${theme.colors.gray300};
+    opacity: 1;
+  }
 `;
 
-// ===== MODALE FULLSCREEN =====
-const ModalOverlay = styled(motion.div)`
+// ========= CHALLENGE & SOLUTION =========
+const StorySection = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-bottom: 100px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const StoryCard = styled(motion.div)`
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 24px;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: ${props =>
+      props.className === 'challenge'
+        ? 'linear-gradient(90deg, #ff8c5a 0%, #ff6b6b 100%)'
+        : 'linear-gradient(90deg, #ec4899 0%, #8b5cf6 100%)'
+    };
+  }
+`;
+
+const StoryTitle = styled.h3`
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 20px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+`;
+
+const StoryText = styled.p`
+  font-size: 16px;
+  color: ${theme.colors.gray300};
+  line-height: 1.8;
+  margin: 0;
+`;
+
+// ========= IMAGES SHOWCASE =========
+const ShowcaseSection = styled.div`
+  margin-bottom: 100px;
+`;
+
+const SectionTitle = styled(motion.h2)`
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  margin: 0 0 48px 0;
+  color: ${theme.colors.gray400};
+  text-transform: uppercase;
+  letter-spacing: 2px;
+
+  &::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg,
+      rgba(255, 140, 90, 0.8) 0%,
+      rgba(236, 72, 153, 0.8) 100%
+    );
+    margin: 16px auto 0;
+  }
+`;
+
+const ImagesGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+`;
+
+const FullWidthImageWrapper = styled.div`
+  grid-column: 1 / -1;
+  margin-bottom: 8px;
+`;
+
+const ImageCard = styled(motion.div)<{ $isMobile?: boolean; $isLong?: boolean }>`
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #0a0a0a;
+  cursor: pointer;
+  aspect-ratio: ${props => props.$isMobile ? '9/16' : props.$isLong ? 'auto' : '16/10'};
+  max-height: ${props => props.$isLong ? '800px' : 'none'};
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  ${props => props.$isMobile ? `
+    max-width: 320px;
+    margin: 0 auto;
+  ` : ''}
+
+  img {
+    width: 100%;
+    height: ${props => props.$isLong ? 'auto' : '100%'};
+    object-fit: ${props => props.$isMobile ? 'contain' : props.$isLong ? 'contain' : 'cover'};
+    object-position: ${props => props.$isMobile || props.$isLong ? 'top center' : 'center'};
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    background: ${props => props.$isMobile || props.$isLong ? '#0a0a0a' : 'transparent'};
+  }
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow:
+      0 20px 60px rgba(255, 140, 90, 0.15),
+      0 10px 30px rgba(0, 0, 0, 0.5);
+    border-color: rgba(255, 140, 90, 0.3);
+
+    img {
+      transform: ${props => props.$isLong ? 'scale(1.02) translateY(-20px)' : 'scale(1.08)'};
+    }
+  }
+`;
+
+const FullWidthImageCard = styled(ImageCard)`
+  aspect-ratio: ${props => props.$isLong ? 'auto' : '21/9'};
+  max-height: ${props => props.$isLong ? '600px' : 'none'};
+`;
+
+const ImageOverlay = styled.div`
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.2) 50%,
+    rgba(0, 0, 0, 0.9) 100%
+  );
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 24px;
+  opacity: 0;
+  transition: all 0.4s ease;
+
+  ${ImageCard}:hover &,
+  ${FullWidthImageCard}:hover & {
+    opacity: 1;
+  }
+
+  &::before {
+    content: '⤢';
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 18px;
+  }
+`;
+
+const ImageCaption = styled.div`
+  h4 {
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+    margin: 0 0 8px 0;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+    line-height: 1.6;
+  }
+`;
+
+// ========= KEY FEATURES =========
+const FeaturesSection = styled.div`
+  margin-bottom: 80px;
+`;
+
+const FeaturesList = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+`;
+
+const FeatureItem = styled(motion.div)`
+  padding: 28px;
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.02) 0%,
+    rgba(255, 140, 90, 0.02) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.04) 0%,
+      rgba(255, 140, 90, 0.04) 100%
+    );
+    border-color: rgba(255, 140, 90, 0.3);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(255, 140, 90, 0.1);
+  }
+`;
+
+const FeatureTitle = styled.h4`
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 10px 0;
+`;
+
+const FeatureDesc = styled.p`
+  font-size: 14px;
+  color: ${theme.colors.gray400};
+  line-height: 1.6;
+  margin: 0;
+`;
+
+// ========= LIGHTBOX =========
+const Lightbox = styled(motion.div)`
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.98);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.97);
   z-index: 2000;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 40px;
 `;
 
-const ModalImage = styled.img`
-  max-width: 90vw;
-  max-height: 90vh;
+const LightboxImage = styled(motion.img)<{ $isMobile?: boolean }>`
+  max-width: ${props => props.$isMobile ? '400px' : '90%'};
+  max-height: 85vh;
   object-fit: contain;
+  border-radius: ${props => props.$isMobile ? '20px' : '12px'};
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  ${props => props.$isMobile ? `
+    border: 8px solid #222;
+    background: #000;
+  ` : ''}
 `;
 
-const ModalCloseButton = styled.button`
+const LightboxClose = styled.button`
   position: absolute;
   top: 30px;
   right: 30px;
-  width: 50px;
-  height: 50px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
 
   &:hover {
     background: rgba(255, 255, 255, 0.2);
-    transform: scale(1.1);
+    transform: scale(1.1) rotate(90deg);
   }
 
   svg {
@@ -256,305 +659,466 @@ const ModalCloseButton = styled.button`
   }
 `;
 
-const ModalNavButton = styled.button`
+const LightboxNav = styled.button<{ $dir: 'prev' | 'next' }>`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 50px;
-  height: 50px;
+  ${props => props.$dir === 'prev' ? 'left: 30px' : 'right: 30px'};
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s;
+  font-size: 20px;
+  transition: all 0.3s ease;
 
   &:hover {
     background: rgba(255, 255, 255, 0.2);
-  }
-
-  svg {
-    width: 24px;
-    height: 24px;
-  }
-
-  &.prev {
-    left: 30px;
-  }
-
-  &.next {
-    right: 30px;
+    transform: translateY(-50%) scale(1.1);
   }
 `;
 
-const ModalInfo = styled.div`
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
-  color: white;
-`;
-
-const ModalTitle = styled.h3`
-  font-size: 16px;
-  font-weight: 500;
-  margin: 0 0 8px 0;
-`;
-
-const ModalDesc = styled.p`
-  font-size: 13px;
-  color: #808080;
-  margin: 0 0 16px 0;
-`;
-
-const ModalCounter = styled.div`
-  font-size: 12px;
-  color: #606060;
-  padding: 6px 16px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 20px;
-  display: inline-block;
-`;
-
-// ===== DESCRIPTIONS DES IMAGES =====
-const imageData: Record<string, Record<string, { title: string; description: string }>> = {
-  weneeds: {
-    "/projects/weneeds/Profil candidat.png": {
-      title: "Profil Candidat Enrichi",
-      description: "Widgets personnalisables pour un profil complet"
+// ========= DATA =========
+const galleryData: Record<string, any> = {
+  1: [
+    {
+      src: '/projects/weneeds/onb1.png',
+      title: 'Onboarding IA Magique',
+      description: "L'IA génère automatiquement un profil complet depuis un CV/LinkedIn en quelques secondes",
+      fullWidth: true
     },
-    "/projects/weneeds/onboarding.png": {
-      title: "Onboarding Magique",
-      description: "IA génère le profil depuis CV/LinkedIn"
+    {
+      src: '/projects/weneeds/onb2.png',
+      title: 'Parcours Candidat Mobile',
+      description: 'Interface mobile intuitive pour créer un profil enrichi avec widgets personnalisables',
+      isMobile: true
     },
-    "/projects/weneeds/analyse.png": {
-      title: "Analytics RH",
-      description: "Dashboard d'analyse des candidats"
+    {
+      src: '/projects/weneeds/onb3.png',
+      title: 'Matching Intelligent Mobile',
+      description: 'Système de matching IA optimisé pour mobile',
+      isMobile: true
     },
-    "/projects/weneeds/mobile.png": {
-      title: "Version Mobile",
-      description: "Application responsive et adaptative"
+    {
+      src: '/projects/weneeds/widg1.png',
+      title: 'Widgets Modulaires',
+      description: 'Écosystème de widgets adaptables en 3 formats pour tous les profils',
+      fullWidth: true,
+      isLong: true
+    },
+    {
+      src: '/projects/weneeds/widg2.png',
+      title: 'Personnalisation Mobile',
+      description: 'Widgets candidat mobile : expériences, formation, portfolio',
+      isMobile: true
+    },
+    {
+      src: '/projects/weneeds/widg3.png',
+      title: 'Widgets Entreprise Mobile',
+      description: 'Interface mobile pour les widgets entreprise',
+      isMobile: true
+    },
+    {
+      src: '/projects/weneeds/widg4.png',
+      title: 'Version Mobile Complète',
+      description: 'Experience responsive optimisée pour tous les devices',
+      isMobile: true
+    },
+    {
+      src: '/projects/weneeds/analyse.png',
+      title: 'Dashboard Analytics RH',
+      description: 'Analyse approfondie des candidats avec résumé IA et recommandations',
+      fullWidth: true
     }
-  },
-  edf: {
-    "/projects/edf/edf dashboard.png": {
-      title: "Dashboard Énergétique",
-      description: "Pilotage temps réel de la consommation"
+  ],
+  2: [
+    {
+      src: '/projects/edf/edf-landing.png',
+      title: 'Landing Page Moderne',
+      description: 'Page d\'accueil présentant les solutions de management énergétique',
+      fullWidth: true
     },
-    "/projects/edf/edf landing.png": {
-      title: "Landing Page",
-      description: "Page d'accueil moderne et engageante"
+    {
+      src: '/projects/edf/edf-connexion.png',
+      title: 'Parcours de Connexion',
+      description: 'Interface de connexion sécurisée adaptée aux différents profils'
     },
-    "/projects/edf/edf connexion.png": {
-      title: "Connexion Sécurisée",
-      description: "Parcours adapté aux profils utilisateurs"
+    {
+      src: '/projects/edf/edf-dashboard.png',
+      title: 'Dashboard de Pilotage',
+      description: 'Interface de gestion énergétique avec visualisations temps réel'
     }
-  },
-  poleEmploi: {
-    "/projects/pole emploi/pole emploi design.png": {
-      title: "Emploi Store",
-      description: "Recommandations intelligentes"
+  ],
+  3: [
+    {
+      src: '/projects/pole-emploi/pole-emploi-design.png',
+      title: 'Design System',
+      description: 'Système de design cohérent et accessible pour l\'ensemble des interfaces',
+      fullWidth: true
     },
-    "/projects/pole emploi/pole emploi gestion des projets.png": {
-      title: "Gestion Projets",
-      description: "Tableau de bord centralisé"
+    {
+      src: '/projects/pole-emploi/pole-emploi-projet-creatin.png',
+      title: 'Création de Projet',
+      description: 'Interface guidée pour définir son projet professionnel'
     },
-    "/projects/pole emploi/pole emploi projet creatin.png": {
-      title: "Création Projet",
-      description: "Interface guidée et intuitive"
+    {
+      src: '/projects/pole-emploi/pole-emploi-gestion-des-projets.png',
+      title: 'Gestion des Projets',
+      description: 'Tableau de bord pour gérer candidatures et projets'
     }
-  }
+  ]
 };
 
-// ===== COMPOSANT PRINCIPAL =====
+// ========= COMPONENT =========
 const ProjectDetail: React.FC = () => {
   const { projectId } = useParams();
   const navigate = useNavigate();
-  const [modalOpen, setModalOpen] = useState(false);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [selectedImage, setSelectedImage] = useState<number | null>(null);
 
-  const project = portfolioData.projects.find(p => p.id === Number(projectId));
+  const project = portfolioData.projects.find(p =>
+    p.id === Number(projectId) || (p as any).slug === projectId
+  );
 
   if (!project) {
     return (
-      <PageWrapper>
-        <MinimalHeader>
-          <HeaderContent>
-            <BackButtonSmall onClick={() => navigate('/')}>
+      <PageContainer>
+        <NavBar>
+          <NavContent>
+            <BackButton onClick={() => navigate('/')}>
               <FiArrowLeft /> Retour
-            </BackButtonSmall>
-            <ProjectTitle>Projet non trouvé</ProjectTitle>
-          </HeaderContent>
-        </MinimalHeader>
-      </PageWrapper>
+            </BackButton>
+          </NavContent>
+        </NavBar>
+        <HeroSection>
+          <ProjectTitle>Projet non trouvé</ProjectTitle>
+        </HeroSection>
+      </PageContainer>
     );
   }
 
-  const images = (project as any).images || [];
-  const projectKey = project.id === 1 ? 'weneeds' : project.id === 2 ? 'edf' : 'poleEmploi';
-  const descriptions = imageData[projectKey] || {};
+  const images = galleryData[project.id] || [];
+  const metrics = project.id === 1 ? [
+    { label: 'Clients', value: '200+', icon: <FiTarget /> },
+    { label: 'Gain de temps', value: '70%', icon: <FiZap /> },
+    { label: 'Satisfaction', value: '92%', icon: <FiAward /> },
+    { label: 'ROI', value: 'x3.5', icon: <HiOutlineSparkles /> }
+  ] : project.id === 2 ? [
+    { label: 'Utilisateurs', value: '5K+', icon: <FiTarget /> },
+    { label: 'Économies', value: '30%', icon: <FiZap /> },
+    { label: 'Uptime', value: '99.9%', icon: <FiAward /> },
+    { label: 'Efficacité', value: '+45%', icon: <HiOutlineSparkles /> }
+  ] : [
+    { label: 'Impact', value: '1M+', icon: <FiTarget /> },
+    { label: 'Engagement', value: '+60%', icon: <FiZap /> },
+    { label: 'Satisfaction', value: '88%', icon: <FiAward /> },
+    { label: 'Conversion', value: 'x2.5', icon: <HiOutlineSparkles /> }
+  ];
 
-  const openModal = (index: number) => {
-    setCurrentImageIndex(index);
-    setModalOpen(true);
+  const features = (project as any).keyProjects || [];
+
+  const handleImageClick = (index: number) => {
+    setSelectedImage(index);
   };
 
-  const closeModal = () => {
-    setModalOpen(false);
-  };
-
-  const navigateModal = (direction: 'prev' | 'next') => {
-    if (direction === 'prev') {
-      setCurrentImageIndex(currentImageIndex === 0 ? images.length - 1 : currentImageIndex - 1);
+  const navigateLightbox = (direction: 'prev' | 'next') => {
+    if (selectedImage === null) return;
+    const flatImages = images.filter((img: any) => img);
+    if (direction === 'next') {
+      setSelectedImage((selectedImage + 1) % flatImages.length);
     } else {
-      setCurrentImageIndex(currentImageIndex === images.length - 1 ? 0 : currentImageIndex + 1);
+      setSelectedImage(selectedImage === 0 ? flatImages.length - 1 : selectedImage - 1);
     }
   };
 
-  // Navigation clavier
-  React.useEffect(() => {
-    if (!modalOpen) return;
+  useEffect(() => {
+    if (selectedImage === null) return;
 
     const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeModal();
-      if (e.key === 'ArrowLeft') navigateModal('prev');
-      if (e.key === 'ArrowRight') navigateModal('next');
+      if (e.key === 'Escape') setSelectedImage(null);
+      if (e.key === 'ArrowRight') navigateLightbox('next');
+      if (e.key === 'ArrowLeft') navigateLightbox('prev');
     };
 
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [modalOpen, currentImageIndex]);
+  }, [selectedImage]);
 
   return (
-    <PageWrapper>
-      {/* Header minimal sur une ligne */}
-      <MinimalHeader>
-        <HeaderContent>
-          <BackButtonSmall onClick={() => navigate('/')}>
+    <PageContainer>
+      {/* Navigation */}
+      <NavBar>
+        <NavContent>
+          <BackButton
+            onClick={() => navigate('/')}
+            whileHover={{ x: -4 }}
+            whileTap={{ scale: 0.95 }}
+          >
             <FiArrowLeft /> Retour
-          </BackButtonSmall>
+          </BackButton>
+          <NavTags>
+            {project.tags.slice(0, 3).map((tag, idx) => (
+              <NavTag
+                key={tag}
+                $color={idx === 0 ? 'orange' : idx === 1 ? 'pink' : 'purple'}
+              >
+                {tag}
+              </NavTag>
+            ))}
+          </NavTags>
+        </NavContent>
+      </NavBar>
 
-          <TitleGroup>
-            <ProjectTitle>{project.title}</ProjectTitle>
-            <ProjectDate>{(project as any).dateRange || '2024'}</ProjectDate>
-            <ProjectDesc>{(project as any).shortDescription}</ProjectDesc>
-          </TitleGroup>
+      {/* Hero Section */}
+      <HeroSection>
+        <ProjectHeader>
+          <ProjectTitle
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          >
+            {project.title}
+          </ProjectTitle>
 
-          <TagsRow>
-            <SmallTag>Product Design</SmallTag>
-            <SmallTag>Mobile Design</SmallTag>
-            <SmallTag>AI Integration</SmallTag>
-          </TagsRow>
-        </HeaderContent>
-      </MinimalHeader>
+          <ProjectSubtitle
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
+          >
+            {project.description}
+          </ProjectSubtitle>
 
-      {/* Images grandes */}
-      <ImagesSection>
-        <ImagesGrid>
-          {images.map((image: string, index: number) => (
-            <BigImageCard
-              key={index}
-              onClick={() => openModal(index)}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+          <MetaInfo
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <MetaItem>
+              <FiTarget />
+              <span>Entreprise</span>
+              <strong>{(project as any).company}</strong>
+            </MetaItem>
+            <MetaItem>
+              <FiAward />
+              <span>Rôle</span>
+              <strong>{(project as any).role}</strong>
+            </MetaItem>
+            <MetaItem>
+              <FiZap />
+              <span>Durée</span>
+              <strong>{(project as any).dateRange}</strong>
+            </MetaItem>
+          </MetaInfo>
+        </ProjectHeader>
+
+        {/* Metrics */}
+        <MetricsSection
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+        >
+          {metrics.map((metric, idx) => (
+            <MetricCard
+              key={idx}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{
+                duration: 0.5,
+                delay: 0.3 + idx * 0.1,
+                ease: "easeOut"
+              }}
+              whileHover={{
+                scale: 1.05,
+                transition: { duration: 0.2 }
+              }}
+              whileTap={{ scale: 0.98 }}
             >
-              <BigImage
-                src={image}
-                alt={descriptions[image]?.title || `Image ${index + 1}`}
-              />
-              <ImageOverlay>
-                <ImageTitle>
-                  {descriptions[image]?.title || `Maquette ${index + 1}`}
-                </ImageTitle>
-              </ImageOverlay>
-            </BigImageCard>
+              <MetricIcon
+                initial={{ rotate: 0 }}
+                whileHover={{ rotate: [0, -10, 10, -10, 0] }}
+                transition={{ duration: 0.5 }}
+              >
+                {metric.icon}
+              </MetricIcon>
+              <MetricValue>{metric.value}</MetricValue>
+              <MetricLabel>{metric.label}</MetricLabel>
+            </MetricCard>
           ))}
-        </ImagesGrid>
-      </ImagesSection>
+        </MetricsSection>
 
-      {/* Metrics flottantes */}
-      <FloatingMetrics
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.5 }}
-      >
-        <MetricBlock>
-          <MetricValue>+45%</MetricValue>
-          <MetricLabel>Engage</MetricLabel>
-        </MetricBlock>
-        <MetricBlock>
-          <MetricValue>2x</MetricValue>
-          <MetricLabel>Convert</MetricLabel>
-        </MetricBlock>
-        <MetricBlock>
-          <MetricValue>-30%</MetricValue>
-          <MetricLabel>Time</MetricLabel>
-        </MetricBlock>
-      </FloatingMetrics>
+        {/* Challenge & Solution */}
+        <StorySection>
+          <StoryCard
+            className="challenge"
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          >
+            <StoryTitle>
+              <FiTarget />
+              Le Challenge
+            </StoryTitle>
+            <StoryText>
+              {project.id === 1
+                ? "Transformer le recrutement traditionnel en créant une plateforme qui connecte instantanément talents et entreprises grâce à l'IA, tout en gardant l'aspect humain au centre du processus."
+                : project.id === 2
+                ? "Concevoir une interface complexe de gestion énergétique qui soit à la fois puissante pour les experts et accessible pour tous les utilisateurs."
+                : "Repenser l'expérience des demandeurs d'emploi en intégrant des recommandations personnalisées basées sur l'IA pour maximiser leurs chances de succès."
+              }
+            </StoryText>
+          </StoryCard>
 
-      {/* Modale */}
+          <StoryCard
+            className="solution"
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+          >
+            <StoryTitle>
+              <HiOutlineSparkles />
+              La Solution
+            </StoryTitle>
+            <StoryText>
+              {project.id === 1
+                ? "Une expérience d'onboarding magique où l'IA génère un profil complet en secondes, des widgets modulaires personnalisables, et un dashboard analytics pour une analyse approfondie des candidats."
+                : project.id === 2
+                ? "Un dashboard intuitif avec visualisations de données en temps réel, des parcours utilisateurs adaptés par profil, et une architecture scalable pour les besoins futurs."
+                : "Un système de recommandations intelligent, une interface moderne et engageante, et des outils de suivi de progression pour accompagner chaque étape du parcours."
+              }
+            </StoryText>
+          </StoryCard>
+        </StorySection>
+
+        {/* Images Showcase */}
+        <ShowcaseSection>
+          <SectionTitle
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+          >
+            Visuels du projet
+          </SectionTitle>
+
+          <ImagesGrid>
+            {images.map((image: any, index: number) => {
+              const ImageComponent = image.fullWidth ? FullWidthImageCard : ImageCard;
+              const Wrapper = image.fullWidth ? FullWidthImageWrapper : React.Fragment;
+
+              return (
+                <Wrapper key={index}>
+                  <ImageComponent
+                    $isMobile={image.isMobile}
+                    $isLong={image.isLong}
+                    onClick={() => handleImageClick(index)}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      duration: 0.5,
+                      delay: 0.1 * Math.min(index, 5),
+                      ease: "easeOut"
+                    }}
+                    whileHover={{ y: -8 }}
+                  >
+                    <img src={image.src} alt={image.title} />
+                    <ImageOverlay>
+                      <ImageCaption>
+                        <h4>{image.title}</h4>
+                        <p>{image.description}</p>
+                      </ImageCaption>
+                    </ImageOverlay>
+                  </ImageComponent>
+                </Wrapper>
+              );
+            })}
+          </ImagesGrid>
+        </ShowcaseSection>
+
+        {/* Key Features */}
+        {features.length > 0 && (
+          <FeaturesSection>
+            <SectionTitle
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.7 }}
+            >
+              Points clés du projet
+            </SectionTitle>
+            <FeaturesList>
+              {features.map((feature: any, idx: number) => (
+                <FeatureItem
+                  key={idx}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{
+                    duration: 0.4,
+                    delay: 0.1 * idx,
+                    ease: "easeOut"
+                  }}
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <FeatureTitle>{feature.name}</FeatureTitle>
+                  <FeatureDesc>{feature.description}</FeatureDesc>
+                </FeatureItem>
+              ))}
+            </FeaturesList>
+          </FeaturesSection>
+        )}
+      </HeroSection>
+
+      {/* Lightbox */}
       <AnimatePresence>
-        {modalOpen && (
-          <ModalOverlay
+        {selectedImage !== null && (
+          <Lightbox
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={closeModal}
+            onClick={() => setSelectedImage(null)}
           >
-            <ModalImage
-              src={images[currentImageIndex]}
-              alt={`Image ${currentImageIndex + 1}`}
+            <LightboxImage
+              src={images[selectedImage].src}
+              alt={images[selectedImage].title}
+              $isMobile={images[selectedImage].isMobile}
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.3 }}
               onClick={(e) => e.stopPropagation()}
             />
 
-            <ModalCloseButton onClick={closeModal}>
+            <LightboxClose onClick={() => setSelectedImage(null)}>
               <FiX />
-            </ModalCloseButton>
+            </LightboxClose>
 
-            <ModalNavButton
-              className="prev"
-              onClick={(e) => {
-                e.stopPropagation();
-                navigateModal('prev');
-              }}
-            >
-              <HiArrowLeft />
-            </ModalNavButton>
-
-            <ModalNavButton
-              className="next"
-              onClick={(e) => {
-                e.stopPropagation();
-                navigateModal('next');
-              }}
-            >
-              <HiArrowRight />
-            </ModalNavButton>
-
-            <ModalInfo>
-              {descriptions[images[currentImageIndex]] && (
-                <>
-                  <ModalTitle>
-                    {descriptions[images[currentImageIndex]].title}
-                  </ModalTitle>
-                  <ModalDesc>
-                    {descriptions[images[currentImageIndex]].description}
-                  </ModalDesc>
-                </>
-              )}
-              <ModalCounter>
-                {currentImageIndex + 1} / {images.length}
-              </ModalCounter>
-            </ModalInfo>
-          </ModalOverlay>
+            {images.length > 1 && (
+              <>
+                <LightboxNav
+                  $dir="prev"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigateLightbox('prev');
+                  }}
+                >
+                  <FiChevronLeft />
+                </LightboxNav>
+                <LightboxNav
+                  $dir="next"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigateLightbox('next');
+                  }}
+                >
+                  <FiChevronRight />
+                </LightboxNav>
+              </>
+            )}
+          </Lightbox>
         )}
       </AnimatePresence>
-    </PageWrapper>
+    </PageContainer>
   );
 };
 
