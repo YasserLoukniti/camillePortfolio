@@ -458,6 +458,117 @@ const ImagesGrid = styled.div`
   }
 `;
 
+const VisualsSlider = styled.div`
+  width: 100%;
+  overflow: hidden;
+  padding: 60px 0;
+  margin-bottom: 80px;
+  background: linear-gradient(180deg,
+    rgba(255, 140, 90, 0.02) 0%,
+    rgba(236, 72, 153, 0.01) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  border-radius: 24px;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 2px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(255, 140, 90, 0.5) 50%,
+      transparent 100%
+    );
+  }
+`;
+
+const SliderContainer = styled.div`
+  display: flex;
+  gap: 20px;
+  padding: 0 40px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  align-items: stretch;
+  height: 500px;
+
+  /* Hide scrollbar */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const SliderCard = styled(motion.div)<{ $isMobile?: boolean; $isWeb?: boolean }>`
+  flex: 0 0 auto;
+  width: ${props => props.$isMobile ? '280px' : props.$isWeb ? '800px' : '500px'};
+  height: 100%;
+  scroll-snap-align: center;
+  position: relative;
+  border-radius: ${props => props.$isMobile ? '24px' : '20px'};
+  overflow: hidden;
+  background: #0a0a0a;
+  cursor: pointer;
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow:
+      0 25px 70px rgba(255, 140, 90, 0.2),
+      0 15px 35px rgba(0, 0, 0, 0.6);
+    border-color: rgba(255, 140, 90, 0.4);
+  }
+
+  img {
+    width: ${props => props.$isMobile ? '150%' : '100%'};
+    height: 100%;
+    object-fit: ${props => props.$isMobile ? 'cover' : props.$isWeb ? 'cover' : 'contain'};
+    object-position: ${props => props.$isMobile ? 'center center' : 'center top'};
+    background: ${props => props.$isMobile ? '#000' : props.$isWeb ? 'transparent' : '#0a0a0a'};
+    position: ${props => props.$isMobile ? 'relative' : 'static'};
+    left: ${props => props.$isMobile ? '50%' : 'auto'};
+    transform: ${props => props.$isMobile ? 'translateX(-50%)' : 'none'};
+  }
+`;
+
+const SliderButton = styled.button<{ $direction: 'left' | 'right' }>`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  ${props => props.$direction === 'left' ? 'left: 10px' : 'right: 10px'};
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 140, 90, 0.2);
+    border-color: rgba(255, 140, 90, 0.4);
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+`;
+
 const FullWidthImageWrapper = styled.div`
   grid-column: 1 / -1;
   margin-bottom: 8px;
@@ -521,7 +632,8 @@ const ImageOverlay = styled.div`
   transition: all 0.4s ease;
 
   ${ImageCard}:hover &,
-  ${FullWidthImageCard}:hover & {
+  ${FullWidthImageCard}:hover &,
+  ${SliderCard}:hover & {
     opacity: 1;
   }
 
@@ -690,51 +802,66 @@ const galleryData: Record<string, any> = {
     {
       src: '/projects/weneeds/onb1.png',
       title: 'Onboarding IA Magique',
-      description: "L'IA génère automatiquement un profil complet depuis un CV/LinkedIn en quelques secondes",
-      fullWidth: true
+      description: "L'IA génère automatiquement un profil complet depuis un CV/LinkedIn",
+      isWeb: true,
+      showInSlider: true,
+      order: 1
     },
     {
       src: '/projects/weneeds/onb2.png',
       title: 'Parcours Candidat Mobile',
-      description: 'Interface mobile intuitive pour créer un profil enrichi avec widgets personnalisables',
-      isMobile: true
+      description: 'Interface mobile intuitive avec widgets personnalisables',
+      isMobile: true,
+      showInSlider: true,
+      order: 2
+    },
+    {
+      src: '/projects/weneeds/widg1.png',
+      title: 'Widgets Modulaires',
+      description: 'Écosystème de widgets adaptables en 3 formats',
+      isWeb: true,
+      showInSlider: true,
+      order: 3
     },
     {
       src: '/projects/weneeds/onb3.png',
       title: 'Matching Intelligent Mobile',
       description: 'Système de matching IA optimisé pour mobile',
-      isMobile: true
+      isMobile: true,
+      showInSlider: true,
+      order: 4
     },
     {
-      src: '/projects/weneeds/widg1.png',
-      title: 'Widgets Modulaires',
-      description: 'Écosystème de widgets adaptables en 3 formats pour tous les profils',
-      fullWidth: true,
-      isLong: true
+      src: '/projects/weneeds/analyse.png',
+      title: 'Dashboard Analytics RH',
+      description: 'Analyse approfondie des candidats avec IA',
+      isWeb: true,
+      showInSlider: true,
+      order: 5
     },
     {
       src: '/projects/weneeds/widg2.png',
       title: 'Personnalisation Mobile',
-      description: 'Widgets candidat mobile : expériences, formation, portfolio',
-      isMobile: true
+      description: 'Widgets candidat mobile',
+      isMobile: true,
+      showInSlider: true,
+      order: 6
     },
     {
       src: '/projects/weneeds/widg3.png',
       title: 'Widgets Entreprise Mobile',
       description: 'Interface mobile pour les widgets entreprise',
-      isMobile: true
+      isMobile: true,
+      showInSlider: true,
+      order: 7
     },
     {
       src: '/projects/weneeds/widg4.png',
       title: 'Version Mobile Complète',
-      description: 'Experience responsive optimisée pour tous les devices',
-      isMobile: true
-    },
-    {
-      src: '/projects/weneeds/analyse.png',
-      title: 'Dashboard Analytics RH',
-      description: 'Analyse approfondie des candidats avec résumé IA et recommandations',
-      fullWidth: true
+      description: 'Experience responsive optimisée',
+      isMobile: true,
+      showInSlider: true,
+      order: 8
     }
   ],
   2: [
@@ -1004,38 +1131,65 @@ const ProjectDetail: React.FC = () => {
             Visuels du projet
           </SectionTitle>
 
-          <ImagesGrid>
-            {images.map((image: any, index: number) => {
-              const ImageComponent = image.fullWidth ? FullWidthImageCard : ImageCard;
-              const Wrapper = image.fullWidth ? FullWidthImageWrapper : React.Fragment;
+          {/* Mixed Visuals Slider */}
+          <VisualsSlider>
+            <SliderButton
+              $direction="left"
+              onClick={() => {
+                const container = document.getElementById('visuals-slider');
+                if (container) {
+                  container.scrollBy({ left: -600, behavior: 'smooth' });
+                }
+              }}
+            >
+              <FiChevronLeft />
+            </SliderButton>
 
-              return (
-                <Wrapper key={index}>
-                  <ImageComponent
-                    $isMobile={image.isMobile}
-                    $isLong={image.isLong}
-                    onClick={() => handleImageClick(index)}
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{
-                      duration: 0.5,
-                      delay: 0.1 * Math.min(index, 5),
-                      ease: "easeOut"
-                    }}
-                    whileHover={{ y: -8 }}
-                  >
-                    <img src={image.src} alt={image.title} />
-                    <ImageOverlay>
-                      <ImageCaption>
-                        <h4>{image.title}</h4>
-                        <p>{image.description}</p>
-                      </ImageCaption>
-                    </ImageOverlay>
-                  </ImageComponent>
-                </Wrapper>
-              );
-            })}
-          </ImagesGrid>
+            <SliderContainer id="visuals-slider">
+              {images
+                .filter((img: any) => img.showInSlider)
+                .sort((a: any, b: any) => (a.order || 999) - (b.order || 999))
+                .map((image: any, index: number) => {
+                  const originalIndex = images.findIndex((img: any) => img.src === image.src);
+                  return (
+                    <SliderCard
+                      key={index}
+                      $isMobile={image.isMobile}
+                      $isWeb={image.isWeb}
+                      onClick={() => handleImageClick(originalIndex)}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{
+                        duration: 0.5,
+                        delay: 0.1 * index,
+                        ease: "easeOut"
+                      }}
+                      whileHover={{ y: -8 }}
+                    >
+                      <img src={image.src} alt={image.title} />
+                      <ImageOverlay>
+                        <ImageCaption>
+                          <h4>{image.title}</h4>
+                          <p>{image.description}</p>
+                        </ImageCaption>
+                      </ImageOverlay>
+                    </SliderCard>
+                  );
+                })}
+            </SliderContainer>
+
+            <SliderButton
+              $direction="right"
+              onClick={() => {
+                const container = document.getElementById('visuals-slider');
+                if (container) {
+                  container.scrollBy({ left: 600, behavior: 'smooth' });
+                }
+              }}
+            >
+              <FiChevronRight />
+            </SliderButton>
+          </VisualsSlider>
         </ShowcaseSection>
 
         {/* Key Features */}
