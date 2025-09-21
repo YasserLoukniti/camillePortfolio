@@ -35,7 +35,7 @@ export const portfolioData = {
     },
     {
       company: "Agregio Solutions",
-      title: "UX/UI Designer",
+      title: "Chargée design et communication",
       dateRange: "Sept 2022 - Août 2023",
       duration: "1 an",
       current: false,
@@ -122,7 +122,7 @@ export const portfolioData = {
       slug: "edf-agregio",
       title: "Produit B2B Énergétique - EDF Agregio",
       category: "UX/UI Design",
-      company: "EDF Agregio-Solutions",
+      company: "Agregio Solutions",
       role: "Chargée design et communication",
       dateRange: "Septembre 2022 - Septembre 2023",
       description: "Design d'une plateforme SaaS de gestion énergétique et d'une application B2B de calcul ROI pour projets énergétiques. Standardisation de produits les rendant scalables.",
