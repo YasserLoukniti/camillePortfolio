@@ -15,16 +15,16 @@ const floatingAnimation = keyframes`
   }
 `;
 
-const pulseGlow = keyframes`
-  0%, 100% {
-    opacity: 0.5;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.1);
-  }
-`;
+// const pulseGlow = keyframes`
+//   0%, 100% {
+//     opacity: 0.5;
+//     transform: scale(1);
+//   }
+//   50% {
+//     opacity: 1;
+//     transform: scale(1.1);
+//   }
+// `;
 
 const AboutSection = styled.section`
   padding: ${theme.spacing['32']} 0;
@@ -81,53 +81,54 @@ const SectionTitle = styled(motion.h2)`
   background-clip: text;
 `;
 
-const HeroIntro = styled(motion.div)`
-  text-align: center;
-  margin-bottom: ${theme.spacing['24']};
-  position: relative;
-`;
+// Unused components - commented out to fix build
+// const HeroIntro = styled(motion.div)`
+//   text-align: center;
+//   margin-bottom: ${theme.spacing['24']};
+//   position: relative;
+// `;
 
-const IntroCard = styled.div`
-  position: relative;
-  max-width: 900px;
-  margin: 0 auto;
+// const IntroCard = styled.div`
+//   position: relative;
+//   max-width: 900px;
+//   margin: 0 auto;
 
-  &::before {
-    content: '';
-    position: absolute;
-    inset: -2px;
-    background: linear-gradient(135deg, ${theme.colors.violet}, ${theme.colors.orange});
-    border-radius: 30px;
-    opacity: 0.3;
-    filter: blur(20px);
-    animation: ${pulseGlow} 4s ease-in-out infinite;
-  }
-`;
+//   &::before {
+//     content: '';
+//     position: absolute;
+//     inset: -2px;
+//     background: linear-gradient(135deg, ${theme.colors.violet}, ${theme.colors.orange});
+//     border-radius: 30px;
+//     opacity: 0.3;
+//     filter: blur(20px);
+//     animation: ${pulseGlow} 4s ease-in-out infinite;
+//   }
+// `;
 
-const IntroContent = styled.div`
-  position: relative;
-  background: rgba(255, 255, 255, 0.01);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 30px;
-  padding: ${theme.spacing['12']};
+// const IntroContent = styled.div`
+//   position: relative;
+//   background: rgba(255, 255, 255, 0.01);
+//   backdrop-filter: blur(20px);
+//   border: 1px solid rgba(255, 255, 255, 0.05);
+//   border-radius: 30px;
+//   padding: ${theme.spacing['12']};
 
-  p {
-    font-size: ${theme.fontSizes['2xl']};
-    line-height: 1.5;
-    color: ${theme.colors.gray200};
-    font-weight: ${theme.fontWeights.light};
+//   p {
+//     font-size: ${theme.fontSizes['2xl']};
+//     line-height: 1.5;
+//     color: ${theme.colors.gray200};
+//     font-weight: ${theme.fontWeights.light};
 
-    strong {
-      color: ${theme.colors.white};
-      font-weight: ${theme.fontWeights.medium};
-      background: linear-gradient(135deg, ${theme.colors.violet}, ${theme.colors.orange});
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-  }
-`;
+//     strong {
+//       color: ${theme.colors.white};
+//       font-weight: ${theme.fontWeights.medium};
+//       background: linear-gradient(135deg, ${theme.colors.violet}, ${theme.colors.orange});
+//       -webkit-background-clip: text;
+//       -webkit-text-fill-color: transparent;
+//       background-clip: text;
+//     }
+//   }
+// `;
 
 const InteractiveTimeline = styled.div`
   position: relative;
