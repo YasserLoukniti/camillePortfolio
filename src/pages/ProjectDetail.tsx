@@ -422,7 +422,7 @@ const StoryText = styled.p`
 
 // ========= IMAGES SHOWCASE =========
 const ShowcaseSection = styled.div`
-  margin-bottom: 100px;
+  margin-bottom: 10px;
 `;
 
 const SectionTitle = styled(motion.h2)`
@@ -460,8 +460,9 @@ const ImagesGrid = styled.div`
 
 const VisualsSlider = styled.div`
   width: 100%;
-  overflow: hidden;
-  padding: 60px 0;
+  overflow-x: hidden;
+  overflow-y: visible;
+  padding: 60px 0 20px;
   margin-bottom: 80px;
   background: linear-gradient(180deg,
     rgba(255, 140, 90, 0.02) 0%,
@@ -470,6 +471,7 @@ const VisualsSlider = styled.div`
   );
   border-radius: 24px;
   position: relative;
+  isolation: isolate;
 
   &::before {
     content: '';
@@ -490,12 +492,13 @@ const VisualsSlider = styled.div`
 const SliderContainer = styled.div`
   display: flex;
   gap: 20px;
-  padding: 0 40px;
+  padding: 15px 40px 20px;
   overflow-x: auto;
+  overflow-y: visible;
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
   align-items: stretch;
-  height: 500px;
+  height: 520px;
 
   /* Hide scrollbar */
   scrollbar-width: none;
@@ -505,10 +508,10 @@ const SliderContainer = styled.div`
   }
 `;
 
-const SliderCard = styled(motion.div)<{ $isMobile?: boolean; $isWeb?: boolean }>`
+const SliderCard = styled(motion.div)<{ $isMobile?: boolean; $isWeb?: boolean; $adjustPosition?: boolean }>`
   flex: 0 0 auto;
   width: ${props => props.$isMobile ? '280px' : props.$isWeb ? '800px' : '500px'};
-  height: 100%;
+  height: calc(100% - 20px);
   scroll-snap-align: center;
   position: relative;
   border-radius: ${props => props.$isMobile ? '24px' : '20px'};
@@ -517,20 +520,26 @@ const SliderCard = styled(motion.div)<{ $isMobile?: boolean; $isWeb?: boolean }>
   cursor: pointer;
   border: 2px solid rgba(255, 255, 255, 0.08);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
 
   &:hover {
-    transform: translateY(-10px) scale(1.02);
+    transform: translateY(-8px) scale(1.015);
     box-shadow:
-      0 25px 70px rgba(255, 140, 90, 0.2),
-      0 15px 35px rgba(0, 0, 0, 0.6);
+      0 15px 40px rgba(255, 140, 90, 0.2),
+      0 10px 25px rgba(0, 0, 0, 0.5),
+      0 0 60px rgba(255, 140, 90, 0.1);
     border-color: rgba(255, 140, 90, 0.4);
+    z-index: 10;
   }
 
   img {
     width: ${props => props.$isMobile ? '150%' : '100%'};
     height: 100%;
     object-fit: ${props => props.$isMobile ? 'cover' : props.$isWeb ? 'cover' : 'contain'};
-    object-position: ${props => props.$isMobile ? 'center center' : 'center top'};
+    object-position: ${props => {
+      if (props.$adjustPosition) return 'center 20%';
+      return props.$isMobile ? 'center top' : 'center top';
+    }};
     background: ${props => props.$isMobile ? '#000' : props.$isWeb ? 'transparent' : '#0a0a0a'};
     position: ${props => props.$isMobile ? 'relative' : 'static'};
     left: ${props => props.$isMobile ? '50%' : 'auto'};
@@ -542,25 +551,27 @@ const SliderButton = styled.button<{ $direction: 'left' | 'right' }>`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  ${props => props.$direction === 'left' ? 'left: 10px' : 'right: 10px'};
+  ${props => props.$direction === 'left' ? 'left: 20px' : 'right: 20px'};
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.9);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 10;
+  z-index: 100;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 
   &:hover {
-    background: rgba(255, 140, 90, 0.2);
-    border-color: rgba(255, 140, 90, 0.4);
+    background: rgba(255, 140, 90, 0.3);
+    border-color: rgba(255, 140, 90, 0.5);
     transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 6px 20px rgba(255, 140, 90, 0.3);
   }
 
   svg {
@@ -675,33 +686,70 @@ const ImageCaption = styled.div`
 
 // ========= KEY FEATURES =========
 const FeaturesSection = styled.div`
-  margin-bottom: 80px;
+  margin-top: -100px;
+  margin-bottom: 60px;
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 60px 40px;
+  background: linear-gradient(180deg,
+    transparent 0%,
+    rgba(255, 140, 90, 0.02) 50%,
+    rgba(236, 72, 153, 0.01) 100%
+  );
 `;
 
 const FeaturesList = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const FeatureItem = styled(motion.div)`
-  padding: 28px;
-  background: linear-gradient(135deg,
-    rgba(255, 255, 255, 0.02) 0%,
-    rgba(255, 140, 90, 0.02) 100%
-  );
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 16px;
+  padding: 32px;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg,
+      rgba(255, 140, 90, 0.6) 0%,
+      rgba(236, 72, 153, 0.6) 100%
+    );
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
 
   &:hover {
-    background: linear-gradient(135deg,
-      rgba(255, 255, 255, 0.04) 0%,
-      rgba(255, 140, 90, 0.04) 100%
-    );
+    background: rgba(255, 255, 255, 0.03);
     border-color: rgba(255, 140, 90, 0.3);
     transform: translateY(-4px);
-    box-shadow: 0 10px 30px rgba(255, 140, 90, 0.1);
+    box-shadow: 0 15px 40px rgba(255, 140, 90, 0.15);
+
+    &::before {
+      transform: scaleX(1);
+    }
   }
 `;
 
@@ -728,15 +776,40 @@ const Lightbox = styled(motion.div)`
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
+`;
+
+const LightboxImageContainer = styled.div<{ $isZoomed: boolean }>`
+  position: relative;
+  display: ${props => props.$isZoomed ? 'block' : 'flex'};
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  cursor: ${props => props.$isZoomed ? 'zoom-out' : 'zoom-in'};
+  overflow: ${props => props.$isZoomed ? 'auto' : 'hidden'};
   padding: 40px;
 `;
 
-const LightboxImage = styled(motion.img)<{ $isMobile?: boolean }>`
-  max-width: ${props => props.$isMobile ? '400px' : '90%'};
-  max-height: 85vh;
+const LightboxImage = styled(motion.img)<{ $isMobile?: boolean; $isZoomed: boolean }>`
+  max-width: ${props => {
+    if (!props.$isZoomed) {
+      return props.$isMobile ? '400px' : '90%';
+    }
+    // Zoom modéré : 120% de la taille normale
+    return props.$isMobile ? '480px' : 'min(120%, 1200px)';
+  }};
+  max-height: ${props => props.$isZoomed ? 'none' : '85vh'};
+  width: auto;
+  height: auto;
   object-fit: contain;
   border-radius: ${props => props.$isMobile ? '20px' : '12px'};
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  cursor: inherit;
+  display: ${props => props.$isZoomed ? 'block' : 'initial'};
+  margin: ${props => props.$isZoomed ? '0 auto' : '0'};
+  transform: ${props => props.$isZoomed ? 'scale(1.2)' : 'scale(1)'};
+  transition: transform 0.3s ease;
   ${props => props.$isMobile ? `
     border: 8px solid #222;
     background: #000;
@@ -809,56 +882,57 @@ const galleryData: Record<string, any> = {
     },
     {
       src: '/projects/weneeds/onb2.png',
-      title: 'Parcours Candidat Mobile',
+      title: 'Onboarding Tour sur un profil candidat',
       description: 'Interface mobile intuitive avec widgets personnalisables',
       isMobile: true,
       showInSlider: true,
       order: 2
     },
     {
-      src: '/projects/weneeds/widg1.png',
-      title: 'Widgets Modulaires',
-      description: 'Écosystème de widgets adaptables en 3 formats',
-      isWeb: true,
+      src: '/projects/weneeds/onb3.png',
+      title: 'Onboarding tour intelligent',
+      description: 'Système de personnalisation du remplissage de profil',
+      isMobile: true,
       showInSlider: true,
       order: 3
     },
     {
-      src: '/projects/weneeds/onb3.png',
-      title: 'Matching Intelligent Mobile',
-      description: 'Système de matching IA optimisé pour mobile',
-      isMobile: true,
+      src: '/projects/weneeds/widg1.png',
+      title: 'Profil candidat avec widgets modulaires',
+      description: 'Écosystème de widgets adaptables en 3 formats',
+      isWeb: true,
       showInSlider: true,
       order: 4
+    },
+    {
+      src: '/projects/weneeds/widg4.png',
+      title: 'Version Mobile Complète',
+      description: 'Experience responsive optimisée',
+      isMobile: true,
+      showInSlider: true,
+      order: 5
     },
     {
       src: '/projects/weneeds/analyse.png',
       title: 'Dashboard Analytics RH',
       description: 'Analyse approfondie des candidats avec IA',
       isWeb: true,
-      showInSlider: true,
-      order: 5
-    },
-    {
-      src: '/projects/weneeds/widg2.png',
-      title: 'Personnalisation Mobile',
-      description: 'Widgets candidat mobile',
-      isMobile: true,
+      adjustPosition: true,
       showInSlider: true,
       order: 6
     },
     {
-      src: '/projects/weneeds/widg3.png',
-      title: 'Widgets Entreprise Mobile',
-      description: 'Interface mobile pour les widgets entreprise',
+      src: '/projects/weneeds/widg2.png',
+      title: 'Recommandations personnalisées',
+      description: 'Widgets candidat mobile',
       isMobile: true,
       showInSlider: true,
       order: 7
     },
     {
-      src: '/projects/weneeds/widg4.png',
-      title: 'Version Mobile Complète',
-      description: 'Experience responsive optimisée',
+      src: '/projects/weneeds/widg3.png',
+      title: 'Parcourir les widgets',
+      description: 'Modale de sélection rapide',
       isMobile: true,
       showInSlider: true,
       order: 8
@@ -907,6 +981,7 @@ const ProjectDetail: React.FC = () => {
   const { projectId } = useParams();
   const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
+  const [isZoomed, setIsZoomed] = useState(false);
 
   const project = portfolioData.projects.find(p =>
     p.id === Number(projectId) || (p as any).slug === projectId
@@ -951,6 +1026,7 @@ const ProjectDetail: React.FC = () => {
 
   const handleImageClick = (index: number) => {
     setSelectedImage(index);
+    setIsZoomed(false);
   };
 
   const navigateLightbox = (direction: 'prev' | 'next') => {
@@ -967,14 +1043,20 @@ const ProjectDetail: React.FC = () => {
     if (selectedImage === null) return;
 
     const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setSelectedImage(null);
+      if (e.key === 'Escape') {
+        if (isZoomed) {
+          setIsZoomed(false);
+        } else {
+          setSelectedImage(null);
+        }
+      }
       if (e.key === 'ArrowRight') navigateLightbox('next');
       if (e.key === 'ArrowLeft') navigateLightbox('prev');
     };
 
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [selectedImage]);
+  }, [selectedImage, isZoomed]);
 
   return (
     <PageContainer>
@@ -1112,7 +1194,7 @@ const ProjectDetail: React.FC = () => {
             </StoryTitle>
             <StoryText>
               {project.id === 1
-                ? "Une expérience d'onboarding magique où l'IA génère un profil complet en secondes, des widgets modulaires personnalisables, et un dashboard analytics pour une analyse approfondie des candidats."
+                ? "Une expérience d'onboarding magique où l'IA génère un profil complet en secondes et permet de créer des expériences rapides. Des widgets modulaires personnalisables, un système de matching intelligent offre-candidat, des interviews IA automatisées, et un dashboard analytics pour une analyse approfondie des candidats."
                 : project.id === 2
                 ? "Un dashboard intuitif avec visualisations de données en temps réel, des parcours utilisateurs adaptés par profil, et une architecture scalable pour les besoins futurs."
                 : "Un système de recommandations intelligent, une interface moderne et engageante, et des outils de suivi de progression pour accompagner chaque étape du parcours."
@@ -1156,6 +1238,7 @@ const ProjectDetail: React.FC = () => {
                       key={index}
                       $isMobile={image.isMobile}
                       $isWeb={image.isWeb}
+                      $adjustPosition={image.adjustPosition}
                       onClick={() => handleImageClick(originalIndex)}
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
@@ -1199,6 +1282,7 @@ const ProjectDetail: React.FC = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.7 }}
+              style={{ marginBottom: '32px' }}
             >
               Points clés du projet
             </SectionTitle>
@@ -1231,17 +1315,38 @@ const ProjectDetail: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setSelectedImage(null)}
+            onClick={() => {
+              if (isZoomed) {
+                setIsZoomed(false);
+              } else {
+                setSelectedImage(null);
+              }
+            }}
           >
-            <LightboxImage
-              src={images[selectedImage].src}
-              alt={images[selectedImage].title}
-              $isMobile={images[selectedImage].isMobile}
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.3 }}
-              onClick={(e) => e.stopPropagation()}
-            />
+            <LightboxImageContainer
+              $isZoomed={isZoomed}
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsZoomed(!isZoomed);
+              }}
+            >
+              <LightboxImage
+                src={images[selectedImage].src}
+                alt={images[selectedImage].title}
+                $isMobile={images[selectedImage].isMobile}
+                $isZoomed={isZoomed}
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{
+                  scale: 1,
+                  opacity: 1
+                }}
+                transition={{
+                  duration: 0.3,
+                  ease: "easeOut"
+                }}
+                draggable={false}
+              />
+            </LightboxImageContainer>
 
             <LightboxClose onClick={() => setSelectedImage(null)}>
               <FiX />

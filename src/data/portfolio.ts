@@ -63,8 +63,8 @@ export const portfolioData = {
       category: "Product Design",
       company: "Weneeds",
       role: "Product Designer & Gestion Produit",
-      dateRange: "Avril 2024 - Septembre 2025",
-      description: "Startup B2B SaaS - Recrutement IA. Seule responsable Design & Produit, concurrençant Indeed et LinkedIn avec une approche AI-powered.",
+      dateRange: "Avril 2024 - Aujourd'hui",
+      description: "Startup B2B SaaS - Recrutement IA. Seule responsable Design & Produit avec une approche AI-powered.",
       shortDescription: "Plateforme de matching RH par IA",
       image: "/projects/weneeds/onb1.png",
       galleries: [
