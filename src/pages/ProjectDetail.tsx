@@ -943,17 +943,25 @@ const galleryData: Record<string, any> = {
       src: '/projects/edf/edf-landing.png',
       title: 'Landing Page Moderne',
       description: 'Page d\'accueil présentant les solutions de management énergétique',
-      fullWidth: true
+      isWeb: true,
+      showInSlider: true,
+      order: 1
     },
     {
       src: '/projects/edf/edf-connexion.png',
       title: 'Parcours de Connexion',
-      description: 'Interface de connexion sécurisée adaptée aux différents profils'
+      description: 'Interface de connexion sécurisée adaptée aux différents profils',
+      isWeb: true,
+      showInSlider: true,
+      order: 2
     },
     {
       src: '/projects/edf/edf-dashboard.png',
       title: 'Dashboard de Pilotage',
-      description: 'Interface de gestion énergétique avec visualisations temps réel'
+      description: 'Interface de gestion énergétique avec visualisations temps réel',
+      isWeb: true,
+      showInSlider: true,
+      order: 3
     }
   ],
   3: [
@@ -961,17 +969,25 @@ const galleryData: Record<string, any> = {
       src: '/projects/pole-emploi/pole-emploi-design.png',
       title: 'Design System',
       description: 'Système de design cohérent et accessible pour l\'ensemble des interfaces',
-      fullWidth: true
+      isWeb: true,
+      showInSlider: true,
+      order: 1
     },
     {
       src: '/projects/pole-emploi/pole-emploi-projet-creatin.png',
       title: 'Création de Projet',
-      description: 'Interface guidée pour définir son projet professionnel'
+      description: 'Interface guidée pour définir son projet professionnel',
+      isWeb: true,
+      showInSlider: true,
+      order: 2
     },
     {
       src: '/projects/pole-emploi/pole-emploi-gestion-des-projets.png',
       title: 'Gestion des Projets',
-      description: 'Tableau de bord pour gérer candidatures et projets'
+      description: 'Tableau de bord pour gérer candidatures et projets',
+      isWeb: true,
+      showInSlider: true,
+      order: 3
     }
   ]
 };
@@ -982,6 +998,11 @@ const ProjectDetail: React.FC = () => {
   const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
   const [isZoomed, setIsZoomed] = useState(false);
+
+  // Scroll to top when component mounts or projectId changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [projectId]);
 
   const project = portfolioData.projects.find(p =>
     p.id === Number(projectId) || (p as any).slug === projectId
@@ -1011,10 +1032,10 @@ const ProjectDetail: React.FC = () => {
     { label: 'Satisfaction', value: '92%', icon: <FiAward /> },
     { label: 'ROI', value: 'x3.5', icon: <HiOutlineSparkles /> }
   ] : project.id === 2 ? [
-    { label: 'Utilisateurs', value: '5K+', icon: <FiTarget /> },
-    { label: 'Économies', value: '30%', icon: <FiZap /> },
-    { label: 'Uptime', value: '99.9%', icon: <FiAward /> },
-    { label: 'Efficacité', value: '+45%', icon: <HiOutlineSparkles /> }
+    { label: 'Testeurs MVP', value: '120', icon: <FiTarget /> },
+    { label: 'Produit Scalable', value: '100%', icon: <FiZap /> },
+    { label: 'Dev Time', value: '-40%', icon: <FiAward /> },
+    { label: 'Insights UX', value: '70+', icon: <HiOutlineSparkles /> }
   ] : [
     { label: 'Impact', value: '1M+', icon: <FiTarget /> },
     { label: 'Engagement', value: '+60%', icon: <FiZap /> },
@@ -1176,7 +1197,7 @@ const ProjectDetail: React.FC = () => {
               {project.id === 1
                 ? "Transformer le recrutement traditionnel en créant une plateforme qui connecte instantanément talents et entreprises grâce à l'IA, tout en gardant l'aspect humain au centre du processus."
                 : project.id === 2
-                ? "Concevoir une interface complexe de gestion énergétique qui soit à la fois puissante pour les experts et accessible pour tous les utilisateurs."
+                ? "Transformer une suite de produits énergétiques sur-mesure en solutions scalables dans le secteur industriel, sans processus UX établi."
                 : "Repenser l'expérience des demandeurs d'emploi en intégrant des recommandations personnalisées basées sur l'IA pour maximiser leurs chances de succès."
               }
             </StoryText>
@@ -1196,7 +1217,7 @@ const ProjectDetail: React.FC = () => {
               {project.id === 1
                 ? "Une expérience d'onboarding magique où l'IA génère un profil complet en secondes et permet de créer des expériences rapides. Des widgets modulaires personnalisables, un système de matching intelligent offre-candidat, des interviews IA automatisées, et un dashboard analytics pour une analyse approfondie des candidats."
                 : project.id === 2
-                ? "Un dashboard intuitif avec visualisations de données en temps réel, des parcours utilisateurs adaptés par profil, et une architecture scalable pour les besoins futurs."
+                ? "Création d'un écosystème UX complet : de la recherche utilisateur à l'interface scalable, en passant par l'implémentation du premier processus centré utilisateur de l'entreprise."
                 : "Un système de recommandations intelligent, une interface moderne et engageante, et des outils de suivi de progression pour accompagner chaque étape du parcours."
               }
             </StoryText>

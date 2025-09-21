@@ -154,12 +154,28 @@ export const portfolioData = {
       ],
       keyProjects: [
         {
-          name: "Interface EMS",
-          description: "Système complet de gestion énergétique avec formulaires complexes"
+          name: "Création du processus UX de zéro",
+          description: "Implémentation de la première méthodologie UX de l'entreprise avec tests utilisateurs terrain, recherche qualitative et quantitative"
         },
         {
-          name: "Dashboard de pilotage",
-          description: "Interfaces de suivi: stockage énergétique, dépenses, prévisions consommation"
+          name: "Révolution du paramétrage EMS",
+          description: "Transformation d'un processus technique manuel en interface self-service intuitive, libérant l'équipe technique et rendant le produit scalable"
+        },
+        {
+          name: "Dashboard business interactif",
+          description: "Conception d'un tableau de bord permettant aux décideurs de comprendre les projets énergétiques, créant un pont entre données techniques et vision business"
+        },
+        {
+          name: "Avantage concurrentiel par l'UX",
+          description: "Création d'une interface ludique et simple dans un secteur industriel complexe, permettant une différenciation forte sur le marché des solutions énergétiques"
+        },
+        {
+          name: "Insights stratégiques d'adoption",
+          description: "Recherche approfondie révélant les facteurs clés d'adoption B2B, identifiant le gap produit-marché et générant des recommandations stratégiques"
+        },
+        {
+          name: "Cas d'usage complets",
+          description: "Conception de tous les états systèmes (alertes, logs, maintenance, erreurs), rendant le produit robuste et professionnel pour les équipes techniques"
         }
       ]
     },
