@@ -137,13 +137,6 @@ const SectionTitle = styled.h2`
   }
 `;
 
-const SectionDescription = styled.p`
-  font-size: ${theme.fontSizes.sm};
-  color: ${theme.colors.gray500};
-  line-height: ${theme.lineHeights.relaxed};
-  margin-left: calc(4px + ${theme.spacing['3']});
-`;
-
 const GalleryGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);

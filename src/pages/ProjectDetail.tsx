@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiArrowLeft, FiX, FiChevronLeft, FiChevronRight, FiMaximize2, FiAward, FiTarget, FiZap } from 'react-icons/fi';
+import { FiArrowLeft, FiX, FiChevronLeft, FiChevronRight, FiAward, FiTarget, FiZap } from 'react-icons/fi';
 import { HiOutlineSparkles } from 'react-icons/hi';
 import { theme } from '../styles/theme';
 import { portfolioData } from '../data/portfolio';
@@ -447,16 +447,6 @@ const SectionTitle = styled(motion.h2)`
   }
 `;
 
-const ImagesGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 24px;
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-`;
 
 const VisualsSlider = styled.div`
   width: 100%;
@@ -580,10 +570,6 @@ const SliderButton = styled.button<{ $direction: 'left' | 'right' }>`
   }
 `;
 
-const FullWidthImageWrapper = styled.div`
-  grid-column: 1 / -1;
-  margin-bottom: 8px;
-`;
 
 const ImageCard = styled(motion.div)<{ $isMobile?: boolean; $isLong?: boolean }>`
   position: relative;

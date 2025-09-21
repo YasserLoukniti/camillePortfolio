@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { motion } from 'framer-motion';
-import { FiArrowDown, FiMail } from 'react-icons/fi';
+import { FiArrowDown } from 'react-icons/fi';
 import { HiSparkles } from 'react-icons/hi';
 import { theme } from '../../styles/theme';
 import Button from '../ui/Button';
-import GlowEffect from '../ui/GlowEffect';
 import { portfolioData } from '../../data/portfolio';
 
 const gradientAnimation = keyframes`

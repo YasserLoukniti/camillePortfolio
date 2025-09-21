@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiCalendar, FiMapPin, FiAward, FiUsers, FiTarget, FiTrendingUp, FiGlobe, FiBriefcase, FiArrowRight, FiZap, FiCode, FiLayers } from 'react-icons/fi';
-import { HiSparkles, HiAcademicCap, HiLightningBolt } from 'react-icons/hi';
+import { FiAward, FiTarget, FiTrendingUp, FiBriefcase, FiZap } from 'react-icons/fi';
+import { HiAcademicCap } from 'react-icons/hi';
 import { theme } from '../../styles/theme';
 import { portfolioData } from '../../data/portfolio';
 
@@ -61,40 +61,24 @@ const SectionHeader = styled.div`
 `;
 
 const SectionTitle = styled(motion.h2)`
-  font-size: clamp(3rem, 7vw, 6rem);
-  font-weight: ${theme.fontWeights.black};
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: ${theme.fontWeights.bold};
   text-align: center;
-  line-height: 0.9;
-  letter-spacing: -0.06em;
-  position: relative;
-  margin-bottom: ${theme.spacing['8']};
-
-  span {
-    display: block;
-    position: relative;
-  }
-
-  .line1 {
-    color: ${theme.colors.white};
-    opacity: 0.2;
-    font-size: 0.5em;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    margin-bottom: ${theme.spacing['2']};
-  }
-
-  .line2 {
-    background: linear-gradient(
-      135deg,
-      ${theme.colors.white} 0%,
-      ${theme.colors.violet} 30%,
-      ${theme.colors.orange} 60%,
-      ${theme.colors.white} 100%
-    );
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
+  margin-bottom: ${theme.spacing['3']};
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  background: linear-gradient(
+    90deg,
+    ${theme.colors.white} 0%,
+    ${theme.colors.violet} 25%,
+    ${theme.colors.orange} 50%,
+    ${theme.colors.violet} 75%,
+    ${theme.colors.white} 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 `;
 
 const HeroIntro = styled(motion.div)`
@@ -220,7 +204,7 @@ const ExperienceCardWrapper = styled.div<{ $index: number }>`
   margin: 0 auto;
   position: relative;
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  @media (max-width: ${theme.breakpoints.lg}) {
     width: 95%;
   }
 `;
@@ -310,7 +294,7 @@ const ExperienceCompany = styled.div`
   display: flex;
   align-items: center;
   gap: ${theme.spacing['3']};
-  font-size: ${theme.fontSizes.md};
+  font-size: ${theme.fontSizes.base};
   color: ${theme.colors.gray400};
   font-weight: ${theme.fontWeights.light};
 
@@ -333,7 +317,7 @@ const ExperienceCompany = styled.div`
 `;
 
 const ExperienceDescription = styled.p`
-  font-size: ${theme.fontSizes.md};
+  font-size: ${theme.fontSizes.base};
   color: ${theme.colors.gray300};
   line-height: 1.8;
   margin-bottom: ${theme.spacing['6']};
@@ -349,7 +333,7 @@ const SkillPills = styled.div`
 const SkillPill = styled(motion.span)<{ $delay: number }>`
   display: inline-flex;
   align-items: center;
-  padding: ${theme.spacing['1.5']} ${theme.spacing['3']};
+  padding: ${theme.spacing['2']} ${theme.spacing['3']};
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
@@ -378,7 +362,7 @@ const StatsGrid = styled.div`
   grid-template-columns: repeat(4, 1fr);
   gap: ${theme.spacing['6']};
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  @media (max-width: ${theme.breakpoints.lg}) {
     grid-template-columns: repeat(2, 1fr);
   }
 `;
@@ -517,29 +501,9 @@ const About: React.FC = () => {
             transition={{ duration: 0.8, ease: "easeOut" }}
             viewport={{ once: true }}
           >
-            <span className="line1">Design + Innovation</span>
-            <span className="line2">Mon Parcours</span>
+            Mon Parcours
           </SectionTitle>
         </SectionHeader>
-
-        <HeroIntro
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-        >
-          <IntroCard>
-            <IntroContent>
-              <p>
-                Je suis <strong>Camille Perlès</strong>, une designer qui transforme
-                l'<strong>intelligence artificielle</strong> en expériences utilisateur
-                intuitives. Mon approche unique mêle <strong>créativité</strong>,
-                <strong>stratégie produit</strong> et <strong>innovation technologique</strong> pour
-                créer des produits qui marquent la différence.
-              </p>
-            </IntroContent>
-          </IntroCard>
-        </HeroIntro>
 
         <InteractiveTimeline>
           <TimelineNav>
@@ -690,9 +654,9 @@ const About: React.FC = () => {
                           </ExperienceCompany>
                         </ExperienceHeader>
 
-                        {cert.description && (
+                        {(cert as any).description && (
                           <ExperienceDescription>
-                            {cert.description}
+                            {(cert as any).description}
                           </ExperienceDescription>
                         )}
                       </ExperienceCard>

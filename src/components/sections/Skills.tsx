@@ -149,7 +149,7 @@ const ToolsGrid = styled.div`
   margin-top: ${theme.spacing['16']};
 `;
 
-const ToolCard = styled(motion.div)`
+const ToolCard = styled(motion.div)<{ $index?: number }>`
   background: ${theme.colors.gray900};
   border: 1px solid ${theme.colors.gray800};
   border-radius: ${theme.borderRadius.xl};
@@ -163,12 +163,29 @@ const ToolCard = styled(motion.div)`
 
   &:hover {
     transform: translateY(-4px) scale(1.05);
-    border-color: ${theme.colors.violet};
-    box-shadow: ${theme.shadows.lg}, ${theme.shadows.glow};
+    border-color: ${props =>
+      props.$index === 0 || props.$index === 4 ? theme.colors.violet :
+      props.$index === 1 || props.$index === 3 || props.$index === 5 ? theme.colors.orange :
+      props.$index === 2 || props.$index === 6 ? theme.colors.pink :
+      theme.colors.violet
+    };
+    box-shadow:
+      ${theme.shadows.lg},
+      0 0 40px ${props =>
+        props.$index === 0 || props.$index === 4 ? 'rgba(139, 92, 246, 0.3)' :
+        props.$index === 1 || props.$index === 3 || props.$index === 5 ? 'rgba(251, 146, 60, 0.3)' :
+        props.$index === 2 || props.$index === 6 ? 'rgba(236, 72, 153, 0.3)' :
+        'rgba(139, 92, 246, 0.3)'
+      };
     background: ${theme.colors.gray800};
 
     svg {
-      color: ${theme.colors.violet};
+      color: ${props =>
+        props.$index === 0 || props.$index === 4 ? theme.colors.violet :
+        props.$index === 1 || props.$index === 3 || props.$index === 5 ? theme.colors.orange :
+        props.$index === 2 || props.$index === 6 ? theme.colors.pink :
+        theme.colors.violet
+      };
       transform: rotate(360deg);
     }
   }
@@ -201,17 +218,17 @@ const Skills: React.FC = () => {
 
   const skillCategories = [
     {
-      title: '🎨 Design',
+      title: 'Design',
       icon: <FiFigma />,
       skills: portfolioData.skills.design
     },
     {
-      title: '👥 Product Management',
+      title: 'Product Management',
       icon: <FiBriefcase />,
       skills: portfolioData.skills.productManagement
     },
     {
-      title: '🤖 IA & Technique',
+      title: 'IA & Technique',
       icon: <FiCpu />,
       skills: portfolioData.skills.aiTechnical
     }
@@ -293,6 +310,7 @@ const Skills: React.FC = () => {
             {tools.map((tool, index) => (
               <ToolCard
                 key={tool.name}
+                $index={index}
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.4, delay: index * 0.05 }}

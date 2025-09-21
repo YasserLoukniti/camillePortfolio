@@ -205,7 +205,7 @@ const ActionButton = styled(motion.button)`
   display: flex;
   align-items: center;
   gap: ${theme.spacing['2']};
-  padding: ${theme.spacing['2.5']} ${theme.spacing['4']};
+  padding: ${theme.spacing['3']} ${theme.spacing['4']};
   background: ${theme.colors.white};
   color: ${theme.colors.black};
   border: none;
@@ -307,34 +307,11 @@ const Projects: React.FC = () => {
                     {(project as any).shortDescription || project.description}
                   </ProjectDescription>
                   <ProjectTags>
-                    {project.tags.slice(0, 3).map((tag, idx) => (
+                    {project.tags.slice(0, 3).map((tag) => (
                       <Badge
                         key={tag}
                         size="sm"
-                        variant="custom"
-                        style={{
-                          background: idx === 0
-                            ? 'rgba(255, 140, 90, 0.1)'
-                            : idx === 1
-                            ? 'rgba(236, 72, 153, 0.1)'
-                            : 'rgba(255, 182, 193, 0.1)',
-                          border: idx === 0
-                            ? '1px solid rgba(255, 140, 90, 0.3)'
-                            : idx === 1
-                            ? '1px solid rgba(236, 72, 153, 0.3)'
-                            : '1px solid rgba(255, 182, 193, 0.3)',
-                          color: idx === 0
-                            ? 'rgb(255, 140, 90)'
-                            : idx === 1
-                            ? 'rgb(236, 72, 153)'
-                            : 'rgb(255, 182, 193)',
-                          padding: '6px 12px',
-                          borderRadius: '12px',
-                          fontSize: '11px',
-                          fontWeight: '600',
-                          letterSpacing: '0.5px',
-                          textTransform: 'uppercase'
-                        }}
+                        variant="default"
                       >
                         {tag}
                       </Badge>
