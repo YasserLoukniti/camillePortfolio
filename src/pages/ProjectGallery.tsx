@@ -792,10 +792,6 @@ const ProjectGallery: React.FC = () => {
 
         {/* Single Gallery Section with 3 cards in a row */}
         <GallerySection>
-          <SectionHeader>
-            <SectionTitle>Interfaces & Fonctionnalités</SectionTitle>
-            <SectionDescription>Cliquez sur une section pour explorer les interfaces en détail</SectionDescription>
-          </SectionHeader>
 
           <GalleryGrid>
             {galleries.map((gallery: any, index: number) => (

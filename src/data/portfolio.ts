@@ -65,7 +65,7 @@ export const portfolioData = {
       role: "Product Designer & Gestion Produit",
       dateRange: "Avril 2024 - Septembre 2025",
       description: "Startup B2B SaaS - Recrutement IA. Seule responsable Design & Produit, concurrençant Indeed et LinkedIn avec une approche AI-powered.",
-      shortDescription: "Plateforme de recrutement IA avec onboarding magique et widgets modulaires",
+      shortDescription: "Plateforme de matching RH par IA",
       image: "/projects/weneeds/onb1.png",
       galleries: [
         {
@@ -126,7 +126,7 @@ export const portfolioData = {
       role: "Chargée design et communication",
       dateRange: "Septembre 2022 - Septembre 2023",
       description: "Filiale EDF - Solutions Énergétiques B2B. Seule UX/UI Designer d'une plateforme SaaS de gestion énergétique industrielle.",
-      shortDescription: "Plateforme SaaS de management énergétique pour entreprises",
+      shortDescription: "Gestion énergétique B2B",
       image: "/projects/edf/edf-connexion.png",
       galleries: [
         {
@@ -172,7 +172,7 @@ export const portfolioData = {
       role: "UX UI Designer",
       dateRange: "Septembre 2023 - Janvier 2024",
       description: "Service Public de l'Emploi. Conception de l'Emploi Store nouvelle génération avec système de recommandations intelligentes.",
-      shortDescription: "Innovation produit avec système de recommandations personnalisées",
+      shortDescription: "Refonte UX avec IA",
       image: "/projects/pole-emploi/pole-emploi-projet-creatin.png",
       galleries: [
         {

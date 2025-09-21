@@ -22,13 +22,15 @@ const Container = styled.div`
 
 const SectionHeader = styled.div`
   text-align: center;
-  margin-bottom: ${theme.spacing['16']};
+  margin-bottom: ${theme.spacing['12']};
 `;
 
 const SectionTitle = styled(motion.h2)`
-  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-size: clamp(2rem, 4vw, 3.5rem);
   font-weight: ${theme.fontWeights.bold};
-  margin-bottom: ${theme.spacing['4']};
+  margin-bottom: ${theme.spacing['3']};
+  letter-spacing: -0.03em;
+  line-height: 1.2;
   background: ${theme.colors.gradientAI};
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -38,8 +40,8 @@ const SectionTitle = styled(motion.h2)`
 const ContentGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 2fr;
-  gap: ${theme.spacing['16']};
-  margin-bottom: ${theme.spacing['16']};
+  gap: ${theme.spacing['12']};
+  margin-bottom: ${theme.spacing['12']};
 
   @media (max-width: ${theme.breakpoints.lg}) {
     grid-template-columns: 1fr;

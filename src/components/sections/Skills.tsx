@@ -34,13 +34,15 @@ const Container = styled.div`
 
 const SectionHeader = styled.div`
   text-align: center;
-  margin-bottom: ${theme.spacing['16']};
+  margin-bottom: ${theme.spacing['12']};
 `;
 
 const SectionTitle = styled(motion.h2)`
-  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-size: clamp(2rem, 4vw, 3.5rem);
   font-weight: ${theme.fontWeights.bold};
-  margin-bottom: ${theme.spacing['4']};
+  margin-bottom: ${theme.spacing['3']};
+  letter-spacing: -0.03em;
+  line-height: 1.2;
   background: ${theme.colors.gradientAI};
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -50,22 +52,25 @@ const SectionTitle = styled(motion.h2)`
 const SectionSubtitle = styled(motion.p)`
   font-size: ${theme.fontSizes.lg};
   color: ${theme.colors.gray400};
+  font-weight: ${theme.fontWeights.regular};
   max-width: 600px;
   margin: 0 auto;
+  opacity: 0.9;
+  line-height: ${theme.lineHeights.relaxed};
 `;
 
 const SkillsGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: ${theme.spacing['8']};
-  margin-bottom: ${theme.spacing['16']};
+  margin-bottom: ${theme.spacing['12']};
 `;
 
 const SkillCategory = styled(motion.div)``;
 
 const CategoryTitle = styled.h3`
-  font-size: ${theme.fontSizes['2xl']};
-  font-weight: ${theme.fontWeights.bold};
+  font-size: ${theme.fontSizes.xl};
+  font-weight: ${theme.fontWeights.semibold};
   margin-bottom: ${theme.spacing['8']};
   display: flex;
   align-items: center;
@@ -230,7 +235,7 @@ const Skills: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            Un ensemble de compétences diversifiées pour créer des expériences exceptionnelles
+            Compétences diversifiées pour créer des expériences exceptionnelles
           </SectionSubtitle>
         </SectionHeader>
 

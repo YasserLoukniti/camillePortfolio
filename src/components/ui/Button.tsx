@@ -20,10 +20,14 @@ interface ButtonProps {
 
 const ButtonVariants = {
   primary: css`
-    background: ${theme.colors.gradientAI};
+    background: ${theme.colors.black};
     color: ${theme.colors.white};
+    border: 2px solid ${theme.colors.white};
     position: relative;
     overflow: hidden;
+    font-weight: ${theme.fontWeights.semibold};
+    text-transform: none;
+    letter-spacing: normal;
 
     &::before {
       content: '';
@@ -32,35 +36,49 @@ const ButtonVariants = {
       left: 0;
       right: 0;
       bottom: 0;
-      background: ${theme.colors.gradientAI};
-      opacity: 0;
-      transition: opacity ${theme.transitions.base};
+      background: ${theme.colors.white};
+      transform: translateX(-100%);
+      transition: transform ${theme.transitions.base};
+    }
+
+    span {
+      position: relative;
+      z-index: 1;
     }
 
     &:hover:not(:disabled) {
       transform: translateY(-2px);
-      box-shadow: ${theme.shadows.lg}, ${theme.shadows.glow};
+      box-shadow: ${theme.shadows.xl};
 
       &::before {
-        opacity: 1;
+        transform: translateX(0);
+      }
+
+      span {
+        color: ${theme.colors.black};
       }
     }
   `,
 
   secondary: css`
-    background: ${theme.colors.gray800};
-    color: ${theme.colors.white};
+    background: ${theme.colors.white};
+    color: ${theme.colors.black};
+    border: 2px solid ${theme.colors.black};
+    font-weight: ${theme.fontWeights.semibold};
 
     &:hover:not(:disabled) {
-      background: ${theme.colors.gray700};
+      background: ${theme.colors.black};
+      color: ${theme.colors.white};
       transform: translateY(-2px);
+      box-shadow: ${theme.shadows.lg};
     }
   `,
 
   outline: css`
-    background: rgba(255, 255, 255, 0.05);
+    background: transparent;
     color: ${theme.colors.white};
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 2px solid ${theme.colors.white};
+    font-weight: ${theme.fontWeights.semibold};
 
     &:hover:not(:disabled) {
       background: ${theme.colors.white};
@@ -92,8 +110,8 @@ const ButtonSizes = {
     font-size: ${theme.fontSizes.base};
   `,
   lg: css`
-    padding: ${theme.spacing['4']} ${theme.spacing['8']};
-    font-size: ${theme.fontSizes.lg};
+    padding: ${theme.spacing['3']} ${theme.spacing['8']};
+    font-size: ${theme.fontSizes.base};
   `,
 };
 
@@ -103,7 +121,7 @@ const StyledButton = styled(motion.button)<ButtonProps>`
   justify-content: center;
   gap: ${theme.spacing['2']};
   font-weight: ${theme.fontWeights.medium};
-  border-radius: ${theme.borderRadius.lg};
+  border-radius: ${theme.borderRadius['2xl']};
   transition: all ${theme.transitions.base};
   cursor: pointer;
   white-space: nowrap;

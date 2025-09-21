@@ -29,6 +29,30 @@ const floatAnimation = keyframes`
   }
 `;
 
+const BackgroundGradient = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at 30% 50%,
+    rgba(139, 92, 246, 0.15) 0%,
+    transparent 50%
+  ),
+  radial-gradient(
+    circle at 70% 50%,
+    rgba(251, 146, 60, 0.15) 0%,
+    transparent 50%
+  ),
+  radial-gradient(
+    circle at 50% 30%,
+    rgba(255, 20, 147, 0.12) 0%,
+    transparent 40%
+  );
+  pointer-events: none;
+`;
+
 const HeroSection = styled.section`
   min-height: 100vh;
   display: flex;
@@ -39,24 +63,6 @@ const HeroSection = styled.section`
   background: ${theme.colors.black};
 `;
 
-const BackgroundGradient = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(
-    circle at 30% 50%,
-    rgba(168, 85, 247, 0.1) 0%,
-    transparent 50%
-  ),
-  radial-gradient(
-    circle at 70% 50%,
-    rgba(255, 107, 53, 0.1) 0%,
-    transparent 50%
-  );
-  pointer-events: none;
-`;
 
 const ParticlesContainer = styled.div`
   position: absolute;
@@ -69,37 +75,44 @@ const ParticlesContainer = styled.div`
 
 const Particle = styled.div<{ delay: number; x: number; y: number }>`
   position: absolute;
-  width: 4px;
-  height: 4px;
+  width: 3px;
+  height: 3px;
   background: ${theme.colors.violet};
   border-radius: 50%;
   left: ${props => props.x}%;
   top: ${props => props.y}%;
-  opacity: 0.5;
+  opacity: 0.3;
   animation: ${floatAnimation} ${props => 3 + props.delay}s ease-in-out infinite;
   animation-delay: ${props => props.delay}s;
+  filter: blur(1px);
 `;
 
 const ContentContainer = styled.div`
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0 ${theme.spacing['6']};
+  padding: ${theme.spacing['8']} ${theme.spacing['6']};
   text-align: center;
   position: relative;
   z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 `;
 
 const TagLine = styled(motion.div)`
   display: inline-flex;
   align-items: center;
   gap: ${theme.spacing['2']};
-  padding: ${theme.spacing['2']} ${theme.spacing['4']};
-  background: rgba(168, 85, 247, 0.1);
-  border: 1px solid rgba(168, 85, 247, 0.3);
+  padding: ${theme.spacing['2']} ${theme.spacing['3']};
+  background: rgba(139, 92, 246, 0.08);
+  border: 1px solid rgba(139, 92, 246, 0.2);
   border-radius: ${theme.borderRadius.full};
-  margin-bottom: ${theme.spacing['8']};
-  font-size: ${theme.fontSizes.sm};
+  margin-bottom: ${theme.spacing['4']};
+  font-size: ${theme.fontSizes.xs};
+  font-weight: ${theme.fontWeights.regular};
   color: ${theme.colors.violet};
+  opacity: 0.9;
 
   svg {
     animation: ${floatAnimation} 2s ease-in-out infinite;
@@ -109,9 +122,22 @@ const TagLine = styled(motion.div)`
 const Title = styled(motion.h1)`
   font-size: clamp(2.5rem, 6vw, 5rem);
   font-weight: ${theme.fontWeights.bold};
-  line-height: 1.1;
-  margin-bottom: ${theme.spacing['6']};
+  line-height: 1.2;
+  margin-bottom: ${theme.spacing['4']};
   letter-spacing: -0.04em;
+
+  .name {
+    font-size: 1em;
+    font-weight: ${theme.fontWeights.bold};
+    display: block;
+    margin-bottom: ${theme.spacing['2']};
+  }
+
+  .role {
+    font-size: 0.7em;
+    font-weight: ${theme.fontWeights.medium};
+    display: block;
+  }
 
   .gradient {
     background: linear-gradient(
@@ -131,16 +157,18 @@ const Title = styled(motion.h1)`
 `;
 
 const Subtitle = styled(motion.p)`
-  font-size: ${theme.fontSizes.xl};
+  font-size: ${theme.fontSizes.lg};
   color: ${theme.colors.gray400};
-  max-width: 700px;
-  margin: 0 auto ${theme.spacing['10']};
+  max-width: 600px;
+  margin: ${theme.spacing['3']} auto ${theme.spacing['12']};
   line-height: ${theme.lineHeights.relaxed};
+  font-weight: ${theme.fontWeights.regular};
+  opacity: 0.9;
 `;
 
 const ButtonGroup = styled(motion.div)`
   display: flex;
-  gap: ${theme.spacing['4']};
+  gap: ${theme.spacing['3']};
   justify-content: center;
   flex-wrap: wrap;
   margin-bottom: ${theme.spacing['16']};
@@ -174,12 +202,14 @@ const ScrollIndicator = styled(motion.div)`
 
 const TypewriterText = styled.span`
   position: relative;
+  font-weight: ${theme.fontWeights.medium};
 
   &::after {
     content: '|';
     position: absolute;
     right: -10px;
     animation: blink 1s step-end infinite;
+    color: ${theme.colors.violet};
   }
 
   @keyframes blink {
@@ -210,7 +240,7 @@ const Hero: React.FC = () => {
     return () => clearInterval(timer);
   }, []);
 
-  const particles = Array.from({ length: 20 }, (_, i) => ({
+  const particles = Array.from({ length: 15 }, (_, i) => ({
     id: i,
     x: Math.random() * 100,
     y: Math.random() * 100,
@@ -247,9 +277,10 @@ const Hero: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          {portfolioData.personal.firstName} {portfolioData.personal.lastName}
-          <br />
-          <TypewriterText className="gradient">{typedText}</TypewriterText>
+          <span className="name">
+            {portfolioData.personal.firstName} {portfolioData.personal.lastName}
+          </span>
+          <TypewriterText className="role gradient">{typedText}</TypewriterText>
         </Title>
 
         <Subtitle
@@ -274,13 +305,11 @@ const Hero: React.FC = () => {
             variant="outline"
             size="lg"
             href="#contact"
-            icon={<FiMail />}
           >
             Me contacter
           </Button>
         </ButtonGroup>
 
-        <GlowEffect color="gradient" size="lg" intensity="high" />
       </ContentContainer>
 
       <ScrollIndicator

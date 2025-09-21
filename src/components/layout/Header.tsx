@@ -22,9 +22,9 @@ const HeaderContainer = styled(motion.header)<{ scrolled: boolean }>`
 `;
 
 const Nav = styled.nav`
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   padding: ${theme.spacing['4']} 0;
   max-width: 1280px;
   margin: 0 auto;
@@ -33,8 +33,8 @@ const Nav = styled.nav`
 `;
 
 const Logo = styled(motion.a)`
-  font-size: ${theme.fontSizes['2xl']};
-  font-weight: ${theme.fontWeights.bold};
+  font-size: ${theme.fontSizes.xl};
+  font-weight: ${theme.fontWeights.black};
   background: ${theme.colors.gradientAI};
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -50,6 +50,7 @@ const Logo = styled(motion.a)`
 const NavLinks = styled.ul`
   display: none;
   align-items: center;
+  justify-content: center;
   gap: ${theme.spacing['8']};
 
   @media (min-width: ${theme.breakpoints.md}) {
@@ -58,8 +59,8 @@ const NavLinks = styled.ul`
 `;
 
 const NavLink = styled(motion.a)`
-  color: ${theme.colors.gray400};
-  font-size: ${theme.fontSizes.sm};
+  color: ${theme.colors.gray300};
+  font-size: ${theme.fontSizes.base};
   font-weight: ${theme.fontWeights.medium};
   transition: all ${theme.transitions.base};
   position: relative;
@@ -82,6 +83,13 @@ const NavLink = styled(motion.a)`
       width: 100%;
     }
   }
+`;
+
+const NavRight = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: ${theme.spacing['4']};
 `;
 
 const DesktopButton = styled(Button)`
@@ -135,8 +143,8 @@ const MobileNavLinks = styled.ul`
 
 const MobileNavLink = styled(motion.a)`
   color: ${theme.colors.white};
-  font-size: ${theme.fontSizes.xl};
-  font-weight: ${theme.fontWeights.medium};
+  font-size: ${theme.fontSizes.lg};
+  font-weight: ${theme.fontWeights.semibold};
   transition: all ${theme.transitions.base};
 
   &:hover {
@@ -207,21 +215,23 @@ const Header: React.FC = () => {
             ))}
           </NavLinks>
 
-          <DesktopButton
-            variant="primary"
-            size="sm"
-            href="#contact"
-            style={{ cursor: 'pointer' }}
-          >
-            Discutons
-          </DesktopButton>
+          <NavRight>
+            <DesktopButton
+              variant="primary"
+              size="sm"
+              href="#contact"
+              style={{ cursor: 'pointer' }}
+            >
+              Discutons
+            </DesktopButton>
 
-          <MobileMenuButton
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Menu"
-          >
-            {mobileMenuOpen ? <FiX size={20} /> : <FiMenu size={20} />}
-          </MobileMenuButton>
+            <MobileMenuButton
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Menu"
+            >
+              {mobileMenuOpen ? <FiX size={20} /> : <FiMenu size={20} />}
+            </MobileMenuButton>
+          </NavRight>
         </Nav>
       </HeaderContainer>
 

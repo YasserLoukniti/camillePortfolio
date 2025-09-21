@@ -22,14 +22,24 @@ const Container = styled.div`
 
 const SectionHeader = styled.div`
   text-align: center;
-  margin-bottom: ${theme.spacing['16']};
+  margin-bottom: ${theme.spacing['12']};
 `;
 
 const SectionTitle = styled(motion.h2)`
-  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-size: clamp(2rem, 4vw, 3.5rem);
   font-weight: ${theme.fontWeights.bold};
-  margin-bottom: ${theme.spacing['4']};
-  background: ${theme.colors.gradientAI};
+  margin-bottom: ${theme.spacing['3']};
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  background: linear-gradient(
+    90deg,
+    ${theme.colors.white} 0%,
+    ${theme.colors.violet} 25%,
+    ${theme.colors.orange} 50%,
+    ${theme.colors.violet} 75%,
+    ${theme.colors.white} 100%
+  );
+  background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -38,38 +48,13 @@ const SectionTitle = styled(motion.h2)`
 const SectionSubtitle = styled(motion.p)`
   font-size: ${theme.fontSizes.lg};
   color: ${theme.colors.gray400};
-  max-width: 700px;
+  font-weight: ${theme.fontWeights.regular};
+  max-width: 600px;
   margin: 0 auto;
+  opacity: 0.9;
+  line-height: ${theme.lineHeights.relaxed};
 `;
 
-const FilterTabs = styled(motion.div)`
-  display: flex;
-  justify-content: center;
-  gap: ${theme.spacing['2']};
-  margin-bottom: ${theme.spacing['12']};
-  flex-wrap: wrap;
-`;
-
-const FilterTab = styled.button<{ active: boolean }>`
-  padding: ${theme.spacing['2']} ${theme.spacing['6']};
-  background: ${props => props.active
-    ? theme.colors.gradientAI
-    : theme.colors.gray900};
-  color: ${theme.colors.white};
-  border: 1px solid ${props => props.active
-    ? 'transparent'
-    : theme.colors.gray800};
-  border-radius: ${theme.borderRadius.full};
-  font-size: ${theme.fontSizes.sm};
-  font-weight: ${theme.fontWeights.medium};
-  transition: all ${theme.transitions.base};
-  cursor: pointer;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: ${theme.shadows.md};
-  }
-`;
 
 const ProjectsGrid = styled(motion.div)`
   display: grid;
@@ -83,25 +68,56 @@ const ProjectsGrid = styled(motion.div)`
 
 const ProjectCard = styled(motion.div)`
   position: relative;
-  background: ${theme.colors.gray900};
-  border-radius: 24px;
+  background: ${theme.colors.black};
+  border: 2px solid ${theme.colors.gray800};
+  border-radius: ${theme.borderRadius.xl};
   overflow: hidden;
   cursor: pointer;
   height: auto;
   transition: all ${theme.transitions.base};
 
   &:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: ${theme.shadows['2xl']}, ${theme.shadows.glow};
+    transform: translateY(-6px);
+    border-color: rgba(255, 140, 90, 0.3);
+    box-shadow:
+      0 20px 40px rgba(255, 140, 90, 0.15),
+      0 0 80px rgba(255, 140, 90, 0.1),
+      0 0 120px rgba(236, 72, 153, 0.05);
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 150%;
+    height: 150%;
+    background: radial-gradient(
+      circle,
+      rgba(255, 140, 90, 0.08) 0%,
+      rgba(236, 72, 153, 0.05) 30%,
+      transparent 70%
+    );
+    opacity: 0;
+    transition: opacity ${theme.transitions.base};
+    pointer-events: none;
+  }
+
+  &:hover::before {
+    opacity: 1;
   }
 `;
 
 const ProjectImage = styled.div<{ image?: string }>`
   width: 100%;
-  height: 240px;
+  height: 220px;
   background: ${props => props.image
     ? `url(${props.image}) center/cover no-repeat`
-    : theme.colors.gradientAI};
+    : `linear-gradient(135deg,
+        rgba(255, 140, 90, 0.2) 0%,
+        rgba(236, 72, 153, 0.2) 50%,
+        rgba(139, 92, 246, 0.2) 100%)`};
   background-size: cover;
   background-position: center;
   position: relative;
@@ -118,12 +134,12 @@ const ProjectImage = styled.div<{ image?: string }>`
     background: linear-gradient(
       to bottom,
       transparent 50%,
-      rgba(0, 0, 0, 0.4) 100%
+      rgba(0, 0, 0, 0.3) 100%
     );
   }
 
   ${ProjectCard}:hover & {
-    transform: scale(1.08);
+    transform: scale(1.05);
   }
 `;
 
@@ -132,14 +148,14 @@ const ProjectOverlay = styled(motion.div)`
   top: 0;
   left: 0;
   right: 0;
-  height: 240px;
+  height: 220px;
   background: rgba(0, 0, 0, 0.9);
   backdrop-filter: blur(4px);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: ${theme.spacing['8']};
+  padding: ${theme.spacing['6']};
   opacity: 0;
   transition: all ${theme.transitions.base};
   pointer-events: none;
@@ -189,7 +205,7 @@ const ActionButton = styled(motion.button)`
   display: flex;
   align-items: center;
   gap: ${theme.spacing['2']};
-  padding: ${theme.spacing['3']} ${theme.spacing['6']};
+  padding: ${theme.spacing['2.5']} ${theme.spacing['4']};
   background: ${theme.colors.white};
   color: ${theme.colors.black};
   border: none;
@@ -200,6 +216,11 @@ const ActionButton = styled(motion.button)`
   transition: all ${theme.transitions.base};
   z-index: 10;
 
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+
   &:hover {
     transform: scale(1.05);
     background: ${theme.colors.whiteLight};
@@ -207,16 +228,11 @@ const ActionButton = styled(motion.button)`
   }
 `;
 
-const Categories = ['Tous', 'Product Design', 'UX/UI Design'];
-
 const Projects: React.FC = () => {
   const navigate = useNavigate();
-  const [selectedCategory, setSelectedCategory] = useState('Tous');
   const [hoveredProject, setHoveredProject] = useState<number | null>(null);
 
-  const filteredProjects = selectedCategory === 'Tous'
-    ? portfolioData.projects
-    : portfolioData.projects.filter(project => project.category === selectedCategory);
+  const filteredProjects = portfolioData.projects;
 
   const handleProjectClick = (project: any) => {
     const slug = project.slug || project.id;
@@ -241,30 +257,12 @@ const Projects: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            Découvrez mes dernières créations en design d'interface et expérience utilisateur
+            Mes dernières créations
           </SectionSubtitle>
         </SectionHeader>
 
-        <FilterTabs
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          viewport={{ once: true }}
-        >
-          {Categories.map(category => (
-            <FilterTab
-              key={category}
-              active={selectedCategory === category}
-              onClick={() => setSelectedCategory(category)}
-            >
-              {category}
-            </FilterTab>
-          ))}
-        </FilterTabs>
-
         <AnimatePresence mode="wait">
           <ProjectsGrid
-            key={selectedCategory}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
@@ -309,8 +307,35 @@ const Projects: React.FC = () => {
                     {(project as any).shortDescription || project.description}
                   </ProjectDescription>
                   <ProjectTags>
-                    {project.tags.slice(0, 4).map(tag => (
-                      <Badge key={tag} size="sm" variant={project.featured ? 'primary' : 'default'}>
+                    {project.tags.slice(0, 3).map((tag, idx) => (
+                      <Badge
+                        key={tag}
+                        size="sm"
+                        variant="custom"
+                        style={{
+                          background: idx === 0
+                            ? 'rgba(255, 140, 90, 0.1)'
+                            : idx === 1
+                            ? 'rgba(236, 72, 153, 0.1)'
+                            : 'rgba(255, 182, 193, 0.1)',
+                          border: idx === 0
+                            ? '1px solid rgba(255, 140, 90, 0.3)'
+                            : idx === 1
+                            ? '1px solid rgba(236, 72, 153, 0.3)'
+                            : '1px solid rgba(255, 182, 193, 0.3)',
+                          color: idx === 0
+                            ? 'rgb(255, 140, 90)'
+                            : idx === 1
+                            ? 'rgb(236, 72, 153)'
+                            : 'rgb(255, 182, 193)',
+                          padding: '6px 12px',
+                          borderRadius: '12px',
+                          fontSize: '11px',
+                          fontWeight: '600',
+                          letterSpacing: '0.5px',
+                          textTransform: 'uppercase'
+                        }}
+                      >
                         {tag}
                       </Badge>
                     ))}

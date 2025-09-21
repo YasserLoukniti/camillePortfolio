@@ -1,37 +1,43 @@
 export const theme = {
   colors: {
-    // Primary colors
+    // Primary colors - Maximum contrast
     black: '#000000',
-    blackLight: '#0A0A0A',
+    blackLight: '#050505',
     white: '#FFFFFF',
     whiteLight: '#FAFAFA',
 
-    // Grays
-    gray100: '#F5F5F7',
-    gray200: '#E5E5E7',
-    gray300: '#D1D1D6',
-    gray400: '#A1A1A6',
-    gray500: '#8E8E93',
-    gray600: '#636366',
-    gray700: '#48484A',
-    gray800: '#2C2C2E',
-    gray900: '#1C1C1E',
+    // Grays - Higher contrast
+    gray100: '#F8F8F8',
+    gray200: '#E8E8E8',
+    gray300: '#D0D0D0',
+    gray400: '#A0A0A0',
+    gray500: '#808080',
+    gray600: '#606060',
+    gray700: '#404040',
+    gray800: '#1A1A1A',
+    gray900: '#0A0A0A',
 
-    // AI Accent colors
-    violet: '#A855F7',
-    violetLight: '#C084FC',
-    violetDark: '#8B5CF6',
+    // Vibrant accent colors
+    violet: '#8B5CF6',
+    violetLight: '#A78BFA',
+    violetDark: '#7C3AED',
     violetPale: '#E9D5FF',
 
-    orange: '#FF6B35',
-    orangeLight: '#FB923C',
-    orangeDark: '#EA580C',
-    orangePale: '#FED7AA',
+    orange: '#FB923C',
+    orangeLight: '#FED7AA',
+    orangeDark: '#F97316',
+    orangePale: '#FFF7ED',
 
-    // Gradients
-    gradientAI: 'linear-gradient(135deg, #A855F7 0%, #FF6B35 100%)',
-    gradientAISubtle: 'linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(255, 107, 53, 0.1) 100%)',
-    gradientDark: 'linear-gradient(180deg, #0A0A0A 0%, #1C1C1E 100%)',
+    pink: '#EC4899',
+    pinkLight: '#F9A8D4',
+    pinkDark: '#DB2777',
+
+    // Modern gradients - Bold and vibrant
+    gradientAI: 'linear-gradient(135deg, #FB923C 0%, #EC4899 50%, #8B5CF6 100%)',
+    gradientAISubtle: 'linear-gradient(135deg, rgba(251, 146, 60, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%)',
+    gradientDark: 'linear-gradient(180deg, #000000 0%, #0A0A0A 100%)',
+    gradientSunset: 'linear-gradient(135deg, #FB923C 0%, #EC4899 100%)',
+    gradientViolet: 'linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%)',
 
     // Functional colors
     success: '#34D399',
@@ -67,6 +73,7 @@ export const theme = {
     medium: 500,
     semibold: 600,
     bold: 700,
+    extrabold: 800,
     black: 900,
   },
 
@@ -109,27 +116,29 @@ export const theme = {
 
   borderRadius: {
     none: '0',
-    sm: '0.125rem',     // 2px
-    base: '0.25rem',    // 4px
-    md: '0.375rem',     // 6px
-    lg: '0.5rem',       // 8px
-    xl: '0.75rem',      // 12px
-    '2xl': '1rem',      // 16px
-    '3xl': '1.5rem',    // 24px
+    sm: '0.25rem',      // 4px
+    base: '0.5rem',     // 8px
+    md: '0.75rem',      // 12px
+    lg: '1rem',         // 16px
+    xl: '1.25rem',      // 20px
+    '2xl': '1.5rem',    // 24px
+    '3xl': '2rem',      // 32px
     full: '9999px',
   },
 
   shadows: {
     xs: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-    sm: '0 2px 4px 0 rgba(0, 0, 0, 0.06)',
-    base: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-    md: '0 6px 10px -2px rgba(0, 0, 0, 0.1)',
-    lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-    xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
-    '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-    glow: '0 0 20px rgba(168, 85, 247, 0.3)',
-    glowOrange: '0 0 20px rgba(255, 107, 53, 0.3)',
-    inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
+    sm: '0 2px 4px 0 rgba(0, 0, 0, 0.1)',
+    base: '0 4px 6px -1px rgba(0, 0, 0, 0.15)',
+    md: '0 6px 10px -2px rgba(0, 0, 0, 0.2)',
+    lg: '0 10px 15px -3px rgba(0, 0, 0, 0.25)',
+    xl: '0 20px 25px -5px rgba(0, 0, 0, 0.3)',
+    '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.4)',
+    glow: '0 0 30px rgba(139, 92, 246, 0.5)',
+    glowOrange: '0 0 30px rgba(251, 146, 60, 0.5)',
+    glowPink: '0 0 30px rgba(236, 72, 153, 0.5)',
+    inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.1)',
+    glass: '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
   },
 
   transitions: {

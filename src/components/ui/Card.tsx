@@ -14,8 +14,8 @@ interface CardProps {
 
 const CardVariants = {
   default: css`
-    background: ${theme.colors.gray900};
-    border: 1px solid ${theme.colors.gray800};
+    background: ${theme.colors.black};
+    border: 2px solid ${theme.colors.gray800};
   `,
 
   gradient: css`
@@ -44,14 +44,16 @@ const CardVariants = {
   `,
 
   glass: css`
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   `,
 };
 
 const StyledCard = styled(motion.div)<CardProps>`
-  border-radius: ${theme.borderRadius['2xl']};
+  border-radius: ${theme.borderRadius['3xl']};
   padding: ${theme.spacing['6']};
   transition: all ${theme.transitions.base};
   overflow: hidden;

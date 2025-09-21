@@ -24,13 +24,15 @@ const Container = styled.div`
 
 const SectionHeader = styled.div`
   text-align: center;
-  margin-bottom: ${theme.spacing['16']};
+  margin-bottom: ${theme.spacing['12']};
 `;
 
 const SectionTitle = styled(motion.h2)`
-  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-size: clamp(2rem, 4vw, 3.5rem);
   font-weight: ${theme.fontWeights.bold};
-  margin-bottom: ${theme.spacing['4']};
+  margin-bottom: ${theme.spacing['3']};
+  letter-spacing: -0.03em;
+  line-height: 1.2;
   background: ${theme.colors.gradientAI};
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -40,8 +42,11 @@ const SectionTitle = styled(motion.h2)`
 const SectionSubtitle = styled(motion.p)`
   font-size: ${theme.fontSizes.lg};
   color: ${theme.colors.gray400};
+  font-weight: ${theme.fontWeights.regular};
   max-width: 600px;
   margin: 0 auto;
+  opacity: 0.9;
+  line-height: ${theme.lineHeights.relaxed};
 `;
 
 const ContactGrid = styled.div`
@@ -113,8 +118,8 @@ const TextArea = styled.textarea`
 
 const CTASection = styled.div`
   text-align: center;
-  margin-top: ${theme.spacing['16']};
-  padding: ${theme.spacing['16']};
+  margin-top: ${theme.spacing['12']};
+  padding: ${theme.spacing['12']};
   background: ${theme.colors.gray900};
   border-radius: ${theme.borderRadius['3xl']};
   position: relative;
@@ -122,16 +127,19 @@ const CTASection = styled.div`
 `;
 
 const CTATitle = styled.h3`
-  font-size: ${theme.fontSizes['3xl']};
-  font-weight: ${theme.fontWeights.bold};
-  margin-bottom: ${theme.spacing['4']};
+  font-size: ${theme.fontSizes['2xl']};
+  font-weight: ${theme.fontWeights.semibold};
+  margin-bottom: ${theme.spacing['3']};
   color: ${theme.colors.white};
+  letter-spacing: -0.02em;
 `;
 
 const CTAText = styled.p`
-  font-size: ${theme.fontSizes.lg};
+  font-size: ${theme.fontSizes.base};
   color: ${theme.colors.gray400};
-  margin-bottom: ${theme.spacing['8']};
+  margin-bottom: ${theme.spacing['6']};
+  opacity: 0.9;
+  line-height: ${theme.lineHeights.relaxed};
 `;
 
 const Notification = styled(motion.div)<{ type: 'success' | 'error' }>`
@@ -269,7 +277,7 @@ const Contact: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            Prête à transformer vos idées en expériences utilisateur exceptionnelles
+            Prête à transformer vos idées en expériences exceptionnelles
           </SectionSubtitle>
         </SectionHeader>
 
