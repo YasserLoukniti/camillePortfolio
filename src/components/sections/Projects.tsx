@@ -235,8 +235,18 @@ const Projects: React.FC = () => {
   const filteredProjects = portfolioData.projects;
 
   const handleProjectClick = (project: any) => {
-    const slug = project.slug || project.id;
-    navigate(`/project/${slug}`);
+    // WeNeeds project has its own dedicated page with case studies
+    if (project.id === 1 || project.slug === 'weneeds') {
+      navigate('/weneeds');
+    }
+    // EDF project has its own dedicated page
+    else if (project.id === 2 || project.slug === 'edf-agregio') {
+      navigate('/edf');
+    }
+    else {
+      const slug = project.slug || project.id;
+      navigate(`/project/${slug}`);
+    }
   };
 
   return (
