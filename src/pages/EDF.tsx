@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { FiArrowLeft, FiTarget, FiZap, FiTrendingUp } from 'react-icons/fi';
+import { FiArrowLeft, FiTarget, FiTrendingUp } from 'react-icons/fi';
 import { HiOutlineLightBulb } from 'react-icons/hi';
 import { theme } from '../styles/theme';
 
@@ -275,45 +275,6 @@ const SolutionCard = styled.div`
     color: ${theme.colors.gray300};
     margin-bottom: ${theme.spacing['6']};
     font-style: italic;
-  }
-`;
-
-const SubSection = styled.div`
-  margin: ${theme.spacing['6']} 0;
-
-  h4 {
-    font-size: ${theme.fontSizes.lg};
-    font-weight: ${theme.fontWeights.semibold};
-    color: ${theme.colors.violet};
-    margin-bottom: ${theme.spacing['3']};
-  }
-`;
-
-const List = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: ${theme.spacing['4']} 0;
-`;
-
-const ListItem = styled.li`
-  font-size: ${theme.fontSizes.base};
-  color: ${theme.colors.gray400};
-  line-height: ${theme.lineHeights.relaxed};
-  margin-bottom: ${theme.spacing['3']};
-  padding-left: ${theme.spacing['8']};
-  position: relative;
-
-  &::before {
-    content: '→';
-    position: absolute;
-    left: 0;
-    color: ${theme.colors.violet};
-    font-weight: ${theme.fontWeights.bold};
-    font-size: ${theme.fontSizes.xl};
-  }
-
-  strong {
-    color: ${theme.colors.white};
   }
 `;
 
