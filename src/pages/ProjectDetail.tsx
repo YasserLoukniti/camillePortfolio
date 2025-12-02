@@ -187,12 +187,12 @@ const MetaItem = styled.div`
 `;
 
 // ========= METRICS SECTION =========
-const MetricsSection = styled(motion.div)`
+const MetricsSection = styled(motion.div)<{ $single?: boolean }>`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: ${props => props.$single ? '1fr' : 'repeat(auto-fit, minmax(180px, 1fr))'};
   gap: 20px;
   margin-bottom: 80px;
-  max-width: 800px;
+  max-width: ${props => props.$single ? '400px' : '800px'};
   margin-left: auto;
   margin-right: auto;
   perspective: 1000px;
@@ -1025,6 +1025,8 @@ const ProjectDetail: React.FC = () => {
     { label: 'Produit Scalable', value: '100%', icon: <FiZap /> },
     { label: 'Dev Time', value: '-40%', icon: <FiAward /> },
     { label: 'Insights UX', value: '70+', icon: <HiOutlineSparkles /> }
+  ] : project.id === 3 ? [
+    { label: 'Satisfaction des Conseillers', value: '↗', icon: <FiAward /> }
   ] : [
     { label: 'Impact', value: '1M+', icon: <FiTarget /> },
     { label: 'Engagement', value: '+60%', icon: <FiZap /> },
@@ -1137,6 +1139,7 @@ const ProjectDetail: React.FC = () => {
 
         {/* Metrics */}
         <MetricsSection
+          $single={metrics.length === 1}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
@@ -1187,7 +1190,7 @@ const ProjectDetail: React.FC = () => {
                 ? "Transformer le recrutement traditionnel en créant une plateforme qui connecte instantanément talents et entreprises grâce à l'IA, tout en gardant l'aspect humain au centre du processus."
                 : project.id === 2
                 ? "Transformer une suite de produits énergétiques sur-mesure en solutions scalables dans le secteur industriel, sans processus UX établi."
-                : "Repenser l'expérience des demandeurs d'emploi en intégrant des recommandations personnalisées basées sur l'IA pour maximiser leurs chances de succès."
+                : "Repenser l'expérience des Conseillers Pôle Emploi en intégrant des recommandations personnalisées basées sur l'IA pour maximiser l'efficacité de leur accompagnement."
               }
             </StoryText>
           </StoryCard>

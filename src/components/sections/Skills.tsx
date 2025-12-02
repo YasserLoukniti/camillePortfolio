@@ -128,18 +128,6 @@ const ProgressFill = styled(motion.div)<{ level: number }>`
   position: relative;
   --progress: ${props => props.level}%;
   animation: ${fillAnimation} 1.5s ease-out forwards;
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 10px;
-    height: 100%;
-    background: ${theme.colors.white};
-    border-radius: 50%;
-    box-shadow: 0 0 10px ${theme.colors.violet};
-  }
 `;
 
 const ToolsGrid = styled.div`

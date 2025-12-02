@@ -659,6 +659,60 @@ const WeNeedsWidgets: React.FC = () => {
             </MetricItem>
           </MetricsGrid>
         </MetricsCard>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          style={{
+            marginTop: theme.spacing['16'],
+            textAlign: 'center'
+          }}
+        >
+          <h3 style={{
+            fontSize: theme.fontSizes['2xl'],
+            fontWeight: theme.fontWeights.bold,
+            color: theme.colors.white,
+            marginBottom: theme.spacing['6']
+          }}>
+            Démo vidéo
+          </h3>
+          <div style={{
+            position: 'relative',
+            paddingBottom: '56.25%',
+            height: 0,
+            overflow: 'hidden',
+            maxWidth: '800px',
+            margin: '0 auto',
+            borderRadius: theme.borderRadius.xl,
+            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
+          }}>
+            <iframe
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                border: 'none',
+                borderRadius: theme.borderRadius.xl
+              }}
+              src="https://www.youtube.com/embed/zcnvN3Urtyg"
+              title="Démo des widgets personnalisables"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+          <p style={{
+            fontSize: theme.fontSizes.base,
+            color: theme.colors.gray400,
+            marginTop: theme.spacing['4'],
+            fontStyle: 'italic'
+          }}>
+            Démonstration interactive du système de widgets personnalisables
+          </p>
+        </motion.div>
       </ContentSection>
     </PageContainer>
   );

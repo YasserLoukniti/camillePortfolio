@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { FiArrowLeft, FiTarget, FiAlertCircle, FiTrendingUp } from 'react-icons/fi';
+import { FiArrowLeft, FiTarget, FiSearch, FiTrendingUp, FiLayers, FiMessageCircle } from 'react-icons/fi';
 import { theme } from '../styles/theme';
 
 const PageContainer = styled.div`
@@ -10,12 +10,11 @@ const PageContainer = styled.div`
   background: ${theme.colors.black};
 `;
 
-const HeroSection = styled.section<{ bgImage?: string }>`
-  min-height: 70vh;
+const HeroSection = styled.section`
+  min-height: 60vh;
   position: relative;
-  background: ${props => props.bgImage
-    ? `linear-gradient(to bottom, rgba(0,0,0,0.4), ${theme.colors.black}), url(${props.bgImage})`
-    : theme.colors.gradientAI};
+  background: linear-gradient(to bottom, rgba(0,0,0,0.6), ${theme.colors.black}),
+              url('/projects/weneeds/Interview.png');
   background-size: cover;
   background-position: center;
   display: flex;
@@ -135,12 +134,21 @@ const ContentSection = styled.section`
   padding: ${theme.spacing['16']} ${theme.spacing['6']};
 `;
 
-const IntroText = styled(motion.p)`
-  font-size: ${theme.fontSizes['2xl']};
-  color: ${theme.colors.gray300};
-  line-height: ${theme.lineHeights.relaxed};
-  margin-bottom: ${theme.spacing['12']};
-  text-align: center;
+const ContextBox = styled(motion.div)`
+  background: linear-gradient(135deg,
+    ${theme.colors.gray900} 0%,
+    rgba(168, 85, 247, 0.05) 100%
+  );
+  border: 1px solid ${theme.colors.gray800};
+  border-radius: ${theme.borderRadius.xl};
+  padding: ${theme.spacing['8']};
+  margin-bottom: ${theme.spacing['16']};
+
+  p {
+    font-size: ${theme.fontSizes.lg};
+    color: ${theme.colors.gray300};
+    line-height: ${theme.lineHeights.relaxed};
+  }
 `;
 
 const SectionBlock = styled(motion.div)`
@@ -171,24 +179,36 @@ const SectionTitle = styled.h2`
   color: ${theme.colors.white};
 `;
 
-const ObjectivesGrid = styled.div`
+const TextContent = styled.div`
+  p {
+    font-size: ${theme.fontSizes.lg};
+    color: ${theme.colors.gray300};
+    line-height: ${theme.lineHeights.relaxed};
+    margin-bottom: ${theme.spacing['4']};
+  }
+`;
+
+const CardsGrid = styled.div`
+  margin-top: ${theme.spacing['6']};
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: ${theme.spacing['4']};
-  margin-top: ${theme.spacing['8']};
 `;
 
-const ObjectiveCard = styled(motion.div)`
+const MiniCard = styled(motion.div)`
+  font-size: ${theme.fontSizes.base};
+  color: ${theme.colors.gray200};
+  line-height: ${theme.lineHeights.relaxed};
+  padding: ${theme.spacing['5']} ${theme.spacing['6']};
   background: linear-gradient(135deg,
-    ${theme.colors.gray900} 0%,
-    rgba(168, 85, 247, 0.03) 100%
+    rgba(168, 85, 247, 0.05) 0%,
+    rgba(255, 140, 90, 0.05) 100%
   );
-  border: 1px solid ${theme.colors.gray800};
   border-radius: ${theme.borderRadius.xl};
-  padding: ${theme.spacing['6']};
+  border: 1px solid rgba(168, 85, 247, 0.15);
+  transition: all ${theme.transitions.base};
   position: relative;
   overflow: hidden;
-  transition: all ${theme.transitions.base};
 
   &::before {
     content: '';
@@ -198,95 +218,33 @@ const ObjectiveCard = styled(motion.div)`
     width: 4px;
     height: 100%;
     background: ${theme.colors.gradientAI};
-    transform: scaleY(0);
-    transform-origin: top;
-    transition: transform ${theme.transitions.base};
+    opacity: 0;
+    transition: opacity ${theme.transitions.base};
   }
 
   &:hover {
+    background: linear-gradient(135deg,
+      rgba(168, 85, 247, 0.1) 0%,
+      rgba(255, 140, 90, 0.1) 100%
+    );
+    border-color: rgba(168, 85, 247, 0.3);
     transform: translateY(-4px);
-    border-color: ${theme.colors.violet};
-    box-shadow: ${theme.shadows.glow};
+    box-shadow: 0 8px 24px rgba(168, 85, 247, 0.15);
 
     &::before {
-      transform: scaleY(1);
+      opacity: 1;
     }
   }
-
-  p {
-    color: ${theme.colors.gray300};
-    font-size: ${theme.fontSizes.base};
-    line-height: ${theme.lineHeights.relaxed};
-  }
 `;
 
-const PainPointsSection = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: ${theme.spacing['8']};
+const SubSection = styled.div`
   margin-top: ${theme.spacing['8']};
-
-  @media (max-width: ${theme.breakpoints.md}) {
-    grid-template-columns: 1fr;
-  }
-`;
-
-const PainPointBox = styled.div`
-  background: linear-gradient(135deg,
-    ${theme.colors.gray900} 0%,
-    rgba(255, 140, 90, 0.05) 100%
-  );
-  border: 1px solid ${theme.colors.gray800};
-  border-radius: ${theme.borderRadius.xl};
-  padding: ${theme.spacing['8']};
-  position: relative;
-  overflow: hidden;
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100px;
-    height: 100px;
-    background: radial-gradient(circle, rgba(255, 140, 90, 0.1), transparent);
-    border-radius: 50%;
-    transform: translate(30%, -30%);
-  }
 
   h3 {
     font-size: ${theme.fontSizes.xl};
-    font-weight: ${theme.fontWeights.bold};
+    font-weight: ${theme.fontWeights.semibold};
     color: ${theme.colors.white};
-    margin-bottom: ${theme.spacing['6']};
-  }
-`;
-
-const PainPointItem = styled.div`
-  display: flex;
-  gap: ${theme.spacing['3']};
-  margin-bottom: ${theme.spacing['4']};
-  position: relative;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-
-  &::before {
-    content: '"';
-    font-size: ${theme.fontSizes['4xl']};
-    color: ${theme.colors.orange};
-    font-weight: ${theme.fontWeights.bold};
-    line-height: 1;
-    opacity: 0.3;
-  }
-
-  p {
-    color: ${theme.colors.gray300};
-    font-size: ${theme.fontSizes.base};
-    line-height: ${theme.lineHeights.relaxed};
-    margin: 0;
-    font-style: italic;
+    margin-bottom: ${theme.spacing['4']};
   }
 `;
 
@@ -321,6 +279,63 @@ const ImageCaption = styled.p`
   text-align: center;
   max-width: 800px;
   margin: 0 auto;
+`;
+
+const TwoColumnGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: ${theme.spacing['6']};
+  margin-top: ${theme.spacing['6']};
+
+  @media (max-width: ${theme.breakpoints.md}) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const InfoCard = styled(motion.div)`
+  background: linear-gradient(135deg,
+    ${theme.colors.gray900} 0%,
+    rgba(168, 85, 247, 0.05) 100%
+  );
+  border: 1px solid ${theme.colors.gray800};
+  border-radius: ${theme.borderRadius.xl};
+  padding: ${theme.spacing['6']};
+  transition: all ${theme.transitions.base};
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: ${theme.colors.gradientAI};
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform ${theme.transitions.base};
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+    border-color: ${theme.colors.violet};
+    box-shadow: 0 12px 32px rgba(168, 85, 247, 0.15);
+
+    &::before {
+      transform: scaleX(1);
+    }
+  }
+
+  h4 {
+    font-size: ${theme.fontSizes.lg};
+    font-weight: ${theme.fontWeights.semibold};
+    color: ${theme.colors.white};
+    margin-bottom: ${theme.spacing['4']};
+    display: flex;
+    align-items: center;
+    gap: ${theme.spacing['2']};
+  }
 `;
 
 const MetricsCard = styled(motion.div)`
@@ -377,12 +392,23 @@ const MetricItem = styled.div`
   }
 `;
 
+const LearningsBox = styled(motion.div)`
+  background: linear-gradient(135deg,
+    rgba(255, 140, 90, 0.1) 0%,
+    rgba(236, 72, 153, 0.1) 100%
+  );
+  border: 2px solid ${theme.colors.orange};
+  border-radius: ${theme.borderRadius['2xl']};
+  padding: ${theme.spacing['8']};
+  margin-top: ${theme.spacing['16']};
+`;
+
 const WeNeedsInterview: React.FC = () => {
   const navigate = useNavigate();
 
   return (
     <PageContainer>
-      <HeroSection bgImage="/projects/weneeds/interview-hero.png">
+      <HeroSection>
         <BackButton
           onClick={() => navigate('/weneeds')}
           whileHover={{ x: -4 }}
@@ -398,46 +424,48 @@ const WeNeedsInterview: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            Étude de cas 02 • WeNeeds
+            Étude de cas • WeNeeds
           </CategoryBadge>
           <Title
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
           >
-            Interview IA conversationnelle
+            Interview IA Conversationnelle
           </Title>
           <Subtitle
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            Remplacer les appels de 15 min par une expérience empathique et efficace
+            Automatiser la pré-qualification sans déshumaniser le recrutement
           </Subtitle>
           <TagsRow
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
           >
-            <Tag color="violet">Conversational AI</Tag>
-            <Tag color="pink">Empathetic Design</Tag>
-            <Tag color="blue">Real-time UX</Tag>
-            <Tag color="orange">Automation</Tag>
+            <Tag color="violet">AI Product Design</Tag>
+            <Tag color="orange">Data Driven</Tag>
+            <Tag color="pink">Conversational AI</Tag>
+            <Tag color="blue">User Research</Tag>
+            <Tag color="violet">Cross-team Coordination</Tag>
+            <Tag color="orange">Mobile Design</Tag>
           </TagsRow>
         </HeroContent>
       </HeroSection>
 
       <ContentSection>
-        <IntroText
+        <ContextBox
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          Les appels de pré-qualification RH sont chronophages et frustrants pour tous. J'ai conçu une interface
-          conversationnelle où l'IA pose les questions de manière dynamique, avec timer et questions adaptatives.
-          En cas de réussite : accès direct au calendrier du recruteur. En cas d'échec : message empathique et
-          suggestions d'autres offres.
-        </IntroText>
+          <p>
+            <strong>Rappel contexte :</strong> J'étais Product Designer chez Weneeds, une plateforme de recrutement, boostée à l'IA.
+            Les candidats peuvent passer une interview IA et prendre directement rendez-vous dans le calendrier du recruteur.
+          </p>
+        </ContextBox>
 
         <SectionBlock
           initial={{ opacity: 0, y: 30 }}
@@ -449,25 +477,15 @@ const WeNeedsInterview: React.FC = () => {
             <SectionIcon>
               <FiTarget size={24} />
             </SectionIcon>
-            <SectionTitle>Objectifs</SectionTitle>
+            <SectionTitle>Challenge</SectionTitle>
           </SectionHeader>
-          <ObjectivesGrid>
-            <ObjectiveCard whileHover={{ y: -4 }} transition={{ duration: 0.2 }}>
-              <p>Remplacer les calls de 15min par une expérience asynchrone</p>
-            </ObjectiveCard>
-            <ObjectiveCard whileHover={{ y: -4 }} transition={{ duration: 0.2 }}>
-              <p>Pré-qualifier automatiquement avec précision</p>
-            </ObjectiveCard>
-            <ObjectiveCard whileHover={{ y: -4 }} transition={{ duration: 0.2 }}>
-              <p>Maintenir (voire améliorer) la qualité relationnelle</p>
-            </ObjectiveCard>
-            <ObjectiveCard whileHover={{ y: -4 }} transition={{ duration: 0.2 }}>
-              <p>En cas de réussite : débloquer accès direct au calendrier recruteur</p>
-            </ObjectiveCard>
-            <ObjectiveCard whileHover={{ y: -4 }} transition={{ duration: 0.2 }}>
-              <p>En cas d'échec : proposer alternatives, pas de porte fermée</p>
-            </ObjectiveCard>
-          </ObjectivesGrid>
+          <TextContent>
+            <p>
+              Remplacer les appels de 15 minutes par une expérience IA conversationnelle qui soit à la fois efficace et empathique.
+              L'enjeu : poser les bonnes questions métier sans tomber dans l'effet "chatbot froid", tout en générant de la data
+              exploitable pour l'analyse.
+            </p>
+          </TextContent>
         </SectionBlock>
 
         <SectionBlock
@@ -478,101 +496,183 @@ const WeNeedsInterview: React.FC = () => {
         >
           <SectionHeader>
             <SectionIcon>
-              <FiAlertCircle size={24} />
+              <FiSearch size={24} />
             </SectionIcon>
-            <SectionTitle>Recherche & Pain Points</SectionTitle>
+            <SectionTitle>Découverte</SectionTitle>
           </SectionHeader>
 
-          <PainPointsSection>
-            <PainPointBox>
-              <h3>Côté Recruteur</h3>
-              <PainPointItem>
-                <p>Je passe 3h/jour à poser les mêmes questions basiques</p>
-              </PainPointItem>
-              <PainPointItem>
-                <p>J'aimerais me concentrer sur les meilleurs candidats</p>
-              </PainPointItem>
-              <PainPointItem>
-                <p>Les no-shows me font perdre un temps fou</p>
-              </PainPointItem>
-            </PainPointBox>
+          <SubSection>
+            <h3>Besoins identifiés :</h3>
+            <CardsGrid>
+              <MiniCard whileHover={{ y: -4 }}>Interaction familière et rassurante (pas d'effet "test")</MiniCard>
+              <MiniCard whileHover={{ y: -4 }}>Questions adaptées à l'offre (pas de standardisation)</MiniCard>
+              <MiniCard whileHover={{ y: -4 }}>Gestion du temps (limiter les réponses trop longues)</MiniCard>
+              <MiniCard whileHover={{ y: -4 }}>Parcours post-interview clair (succès/échec)</MiniCard>
+            </CardsGrid>
+          </SubSection>
 
-            <PainPointBox>
-              <h3>Côté Candidat</h3>
-              <PainPointItem>
-                <p>J'attends des semaines sans nouvelles</p>
-              </PainPointItem>
-              <PainPointItem>
-                <p>Le rejet par email automatique est humiliant</p>
-              </PainPointItem>
-              <PainPointItem>
-                <p>Je ne sais jamais où j'en suis dans le processus</p>
-              </PainPointItem>
-            </PainPointBox>
-          </PainPointsSection>
+          <SubSection>
+            <h3>Contraintes IA :</h3>
+            <CardsGrid>
+              <MiniCard whileHover={{ y: -4 }}>Output verbeux (questions et réponses trop longues)</MiniCard>
+              <MiniCard whileHover={{ y: -4 }}>Nécessité de calibrer le ton (ni trop formel, ni trop décontracté)</MiniCard>
+              <MiniCard whileHover={{ y: -4 }}>Équilibre entre questions ouvertes (data riche) et QCM (rapidité)</MiniCard>
+            </CardsGrid>
+          </SubSection>
         </SectionBlock>
 
-        <ImageBlock
+        <SectionBlock
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <ImageContainer>
-            <Image src="/projects/weneeds/Interview.png" alt="Interface web" />
-          </ImageContainer>
-          <ImageCaption>
-            Version web : style messagerie familier avec bannière entreprise, timer visible et barre de progression.
-            Les questions s'affichent progressivement pour créer un rythme naturel.
-          </ImageCaption>
-        </ImageBlock>
+          <SectionHeader>
+            <SectionIcon>
+              <FiLayers size={24} />
+            </SectionIcon>
+            <SectionTitle>Architecture UX</SectionTitle>
+          </SectionHeader>
 
-        <ImageBlock
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-        >
-          <ImageContainer>
-            <Image src="/projects/weneeds/mobile.png" alt="Interface mobile" />
-          </ImageContainer>
-          <ImageCaption>
-            Challenge mobile : éviter le "simple chat". Solution : expérience immersive avec bannière en fond blur,
-            questions en très gros, barre de progression circulaire. Une expérience à part. Flexibilité : questions
-            ouvertes pour les réponses détaillées, QCM pour les infos factuelles. L'IA adapte le type de question
-            selon ce qu'elle cherche à évaluer.
-          </ImageCaption>
-        </ImageBlock>
+          <SubSection>
+            <h3>Web : Interface Messagerie</h3>
+            <CardsGrid>
+              <MiniCard whileHover={{ y: -4 }}>Layout vertical inspiré des apps de chat</MiniCard>
+              <MiniCard whileHover={{ y: -4 }}>Header : bannière entreprise, nom du poste</MiniCard>
+              <MiniCard whileHover={{ y: -4 }}>Timer visible + barre de progression</MiniCard>
+              <MiniCard whileHover={{ y: -4 }}>Questions affichées progressivement</MiniCard>
+              <MiniCard whileHover={{ y: -4 }}>Types de réponses : texte libre ou choix multiples</MiniCard>
+            </CardsGrid>
+          </SubSection>
 
-        <ImageBlock
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-        >
-          <ImageContainer isMobile>
-            <Image src="/projects/weneeds/felicitations.png" alt="Message d'échec empathique" isMobile />
-          </ImageContainer>
-          <ImageCaption>
-            Automatisation ≠ froideur. En cas d'échec, message personnalisé généré par l'IA qui explique pourquoi
-            (sans blesser) et propose 3 offres similaires. Pas de porte fermée.
-          </ImageCaption>
-        </ImageBlock>
+          <ImageBlock
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <ImageContainer>
+              <Image src="/projects/weneeds/Interview.png" alt="Interface web de l'interview" />
+            </ImageContainer>
+            <ImageCaption>
+              Layout vertical inspiré des apps de chat, avec bannière entreprise, timer et barre de progression
+            </ImageCaption>
+          </ImageBlock>
 
-        <ImageBlock
+          <SubSection>
+            <h3>Mobile : Expérience Immersive</h3>
+            <p style={{ fontSize: theme.fontSizes.base, color: theme.colors.gray300, marginBottom: theme.spacing['4'] }}>
+              <strong>Constat :</strong> messagerie trop dense sur petit écran.<br />
+              <strong>Solution :</strong> Question-by-question plein écran
+            </p>
+            <CardsGrid>
+              <MiniCard whileHover={{ y: -4 }}>Bannière entreprise en fond (blur + transparence)</MiniCard>
+              <MiniCard whileHover={{ y: -4 }}>Question en très gros (focus total)</MiniCard>
+              <MiniCard whileHover={{ y: -4 }}>Timer circulaire visuel</MiniCard>
+              <MiniCard whileHover={{ y: -4 }}>Champ de réponse style messagerie en bas</MiniCard>
+              <MiniCard whileHover={{ y: -4 }}>Navigation séquentielle (une question à la fois)</MiniCard>
+            </CardsGrid>
+          </SubSection>
+
+          <ImageBlock
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <ImageContainer>
+              <Image src="/projects/weneeds/mobile.png" alt="Interface mobile immersive" />
+            </ImageContainer>
+            <ImageCaption>
+              Expérience mobile immersive avec question plein écran, bannière en fond blur et timer circulaire
+            </ImageCaption>
+          </ImageBlock>
+        </SectionBlock>
+
+        <SectionBlock
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <ImageContainer isMobile>
-            <Image src="/projects/weneeds/calendrier.png" alt="Calendrier de prise de RDV" isMobile />
-          </ImageContainer>
-          <ImageCaption>
-            Si réussite : accès instantané au calendrier du recruteur. Réservation en 2 clics, confirmation auto,
-            ajout Google Cal/Outlook. Zéro friction.
-          </ImageCaption>
-        </ImageBlock>
+          <SectionTitle style={{ marginBottom: theme.spacing['6'] }}>Optimisation Conversationnelle</SectionTitle>
+
+          <SubSection>
+            <h3>Collaboration Data Scientist :</h3>
+            <CardsGrid>
+              <MiniCard whileHover={{ y: -4 }}>Contraintes de longueur (questions max 2 lignes, réponses max 200 caractères)</MiniCard>
+              <MiniCard whileHover={{ y: -4 }}>Calibrage du timer (5 min/question après tests utilisateurs)</MiniCard>
+              <MiniCard whileHover={{ y: -4 }}>Prompt engineering pour ton empathique mais professionnel</MiniCard>
+              <MiniCard whileHover={{ y: -4 }}>Itérations sur formulations pour éviter l'effet "robot"</MiniCard>
+            </CardsGrid>
+          </SubSection>
+
+          <SubSection>
+            <h3>Évolution du système :</h3>
+            <CardsGrid>
+              <MiniCard whileHover={{ y: -4 }}><strong>V1 :</strong> Seulement des questions fermées</MiniCard>
+              <MiniCard whileHover={{ y: -4 }}><strong>V2 :</strong> Priorisation questions ouvertes (meilleure data pour analyse dashboard) + questions fermées</MiniCard>
+              <MiniCard whileHover={{ y: -4 }}><strong>V3 :</strong> Ajout questions adaptatives (si réponse X → question Y)</MiniCard>
+            </CardsGrid>
+          </SubSection>
+        </SectionBlock>
+
+        <SectionBlock
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+        >
+          <SectionTitle style={{ marginBottom: theme.spacing['6'] }}>Parcours Post-Interview</SectionTitle>
+
+          <TwoColumnGrid>
+            <InfoCard whileHover={{ y: -4 }}>
+              <h4>✅ Réussite</h4>
+              <CardsGrid>
+                <MiniCard whileHover={{ y: -4 }}>Écran de félicitations</MiniCard>
+                <MiniCard whileHover={{ y: -4 }}>Accès direct au calendrier du recruteur</MiniCard>
+                <MiniCard whileHover={{ y: -4 }}>Booking instantané de rendez-vous</MiniCard>
+              </CardsGrid>
+            </InfoCard>
+
+            <InfoCard whileHover={{ y: -4 }}>
+              <h4>💡 Échec</h4>
+              <CardsGrid>
+                <MiniCard whileHover={{ y: -4 }}>Message empathique personnalisé (généré par IA)</MiniCard>
+                <MiniCard whileHover={{ y: -4 }}>Suggestions d'offres similaires</MiniCard>
+                <MiniCard whileHover={{ y: -4 }}>Possibilité de "repêchage" par le recruteur (pas de porte fermée)</MiniCard>
+              </CardsGrid>
+            </InfoCard>
+          </TwoColumnGrid>
+
+          <ImageBlock
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <ImageContainer isMobile>
+              <Image src="/projects/weneeds/calendrier.png" alt="Calendrier de prise de RDV" isMobile />
+            </ImageContainer>
+            <ImageCaption>
+              En cas de réussite : accès direct au calendrier du recruteur pour booking instantané
+            </ImageCaption>
+          </ImageBlock>
+
+          <ImageBlock
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <ImageContainer isMobile>
+              <Image src="/projects/weneeds/felicitations.png" alt="Message empathique en cas d'échec" isMobile />
+            </ImageContainer>
+            <ImageCaption>
+              En cas d'échec : message empathique personnalisé avec suggestions d'offres similaires
+            </ImageCaption>
+          </ImageBlock>
+        </SectionBlock>
 
         <MetricsCard
           initial={{ opacity: 0, y: 30 }}
@@ -586,19 +686,89 @@ const WeNeedsInterview: React.FC = () => {
           </MetricsTitle>
           <MetricsGrid>
             <MetricItem>
-              <p>Temps RH économisé sur pré-qualification</p>
-              <strong>~70%</strong>
+              <p>Pour les recruteurs</p>
+              <strong>70% de réduction</strong>
+              <p style={{ marginTop: theme.spacing['2'] }}>du temps de pré-qualification</p>
             </MetricItem>
             <MetricItem>
-              <p>Réduction des no-shows</p>
-              <strong>-60%</strong>
+              <p>Data structurée</p>
+              <strong>Exploitable</strong>
+              <p style={{ marginTop: theme.spacing['2'] }}>dans le dashboard analytique</p>
             </MetricItem>
             <MetricItem>
-              <p>Satisfaction candidat vs process classique</p>
-              <strong>+45%</strong>
+              <p>Pour les candidats</p>
+              <strong>Expérience claire</strong>
+              <p style={{ marginTop: theme.spacing['2'] }}>et engageante avec feedback immédiat</p>
             </MetricItem>
           </MetricsGrid>
         </MetricsCard>
+
+        <SectionBlock
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+        >
+          <SectionHeader>
+            <SectionIcon>
+              <FiMessageCircle size={24} />
+            </SectionIcon>
+            <SectionTitle>Extension : Assistant IA</SectionTitle>
+          </SectionHeader>
+          <TextContent>
+            <p>
+              Nous avons plus tard chez Weneeds décidé d'intégrer un <strong>"Assistant IA"</strong> capable de répondre à tout type
+              de requêtes du recruteur et du candidat. Celui-ci n'est pas encore 100% designé mais j'ai pu créer des premiers prototypes.
+              Mon expérience de l'interview m'a permis de réutiliser mes connaissances dans cette fonctionnalité :
+            </p>
+            <p>
+              Réutilisation du pattern conversationnel pour créer un assistant capable de :
+            </p>
+            <CardsGrid>
+              <MiniCard whileHover={{ y: -4 }}>Répondre aux questions recruteurs/candidats</MiniCard>
+              <MiniCard whileHover={{ y: -4 }}>Informer sur rendez-vous et matching</MiniCard>
+              <MiniCard whileHover={{ y: -4 }}>Gérer discussions (ajout/suppression, états de chargement)</MiniCard>
+            </CardsGrid>
+            <p>
+              <strong>Design pattern :</strong> Messagerie + réponses visuelles structurées (cards, listes, boutons d'action).
+            </p>
+          </TextContent>
+
+          <ImageBlock
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <ImageContainer>
+              <Image src="/projects/weneeds/assistant.png" alt="Assistant IA" />
+            </ImageContainer>
+            <ImageCaption>
+              Premiers prototypes de l'Assistant IA avec interface conversationnelle et réponses structurées
+            </ImageCaption>
+          </ImageBlock>
+
+          <TextContent>
+            <p style={{ fontStyle: 'italic', color: theme.colors.gray400 }}>
+              Cet assistant est encore en cours de création...
+            </p>
+          </TextContent>
+        </SectionBlock>
+
+        <LearningsBox
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+        >
+          <SectionTitle style={{ marginBottom: theme.spacing['6'] }}>Learnings</SectionTitle>
+          <CardsGrid>
+            <MiniCard whileHover={{ y: -4 }}><strong>Contraindre l'IA par le design :</strong> limiter l'espace = forcer la concision</MiniCard>
+            <MiniCard whileHover={{ y: -4 }}><strong>Mobile ≠ web adapté :</strong> repenser l'expérience en fonction du contexte</MiniCard>
+            <MiniCard whileHover={{ y: -4 }}><strong>Itération technique/design :</strong> collaboration étroite Data Scientist indispensable</MiniCard>
+            <MiniCard whileHover={{ y: -4 }}><strong>L'empathie passe par les détails :</strong> wording, timing, alternatives post-échec</MiniCard>
+          </CardsGrid>
+        </LearningsBox>
       </ContentSection>
     </PageContainer>
   );

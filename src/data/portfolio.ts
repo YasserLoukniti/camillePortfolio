@@ -57,6 +57,20 @@ export const portfolioData = {
 
   projects: [
     {
+      id: 4,
+      slug: "weneeds-interview",
+      title: "Interview IA Conversationnelle",
+      category: "AI Product Design",
+      company: "Weneeds",
+      role: "Product Designer & Gestion Produit",
+      dateRange: "Avril 2024 - Aujourd'hui",
+      description: "Remplacer les appels de 15 min par une expérience empathique et efficace. Interface conversationnelle avec questions adaptatives, timer intelligent, et gestion des cas de réussite/échec.",
+      shortDescription: "Automatisation empathique des entretiens RH",
+      image: "/projects/weneeds/Interview.png",
+      tags: ["Conversational AI", "Empathetic Design", "Real-time UX", "Automation", "Product Strategy"],
+      featured: true
+    },
+    {
       id: 1,
       slug: "weneeds",
       title: "Plateforme Weneeds - Architecture Produit Complète",
@@ -223,17 +237,17 @@ export const portfolioData = {
       featured: true,
       highlights: [
         "Système de recommandations d'applications emploi personnalisées",
-        "User research auprès des demandeurs d'emploi",
-        "Personnalisation de l'accompagnement emploi à l'échelle nationale"
+        "User research auprès des Conseillers Pôle Emploi",
+        "Augmentation de la satisfaction des Conseillers"
       ],
       keyProjects: [
         {
           name: "Système de Recommandations",
-          description: "Fonctionnalité générant des recommandations d'applications emploi personnalisées"
+          description: "Fonctionnalité générant des recommandations d'applications emploi personnalisées pour les Conseillers"
         },
         {
           name: "User Research",
-          description: "Research approfondi auprès des demandeurs d'emploi pour validation concept"
+          description: "Research approfondi auprès des Conseillers Pôle Emploi pour validation concept et amélioration de leurs outils de travail"
         },
         {
           name: "Accessibilité et inclusion",

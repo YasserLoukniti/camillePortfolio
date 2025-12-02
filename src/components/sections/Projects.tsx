@@ -58,10 +58,10 @@ const SectionSubtitle = styled(motion.p)`
 
 const ProjectsGrid = styled(motion.div)`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: ${theme.spacing['8']};
 
-  @media (max-width: ${theme.breakpoints.sm}) {
+  @media (max-width: ${theme.breakpoints.md}) {
     grid-template-columns: 1fr;
   }
 `;
@@ -235,8 +235,12 @@ const Projects: React.FC = () => {
   const filteredProjects = portfolioData.projects;
 
   const handleProjectClick = (project: any) => {
+    // WeNeeds Interview AI has its own dedicated page
+    if (project.id === 4 || project.slug === 'weneeds-interview') {
+      navigate('/weneeds/interview');
+    }
     // WeNeeds project has its own dedicated page with case studies
-    if (project.id === 1 || project.slug === 'weneeds') {
+    else if (project.id === 1 || project.slug === 'weneeds') {
       navigate('/weneeds');
     }
     // EDF project has its own dedicated page
