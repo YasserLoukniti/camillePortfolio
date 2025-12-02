@@ -208,13 +208,13 @@ export const portfolioData = {
     {
       id: 3,
       slug: "pole-emploi",
-      title: "Design System & Expérience Utilisateur - Pôle Emploi",
+      title: "Créer des parcours sur-mesure pour les demandeurs d'emploi",
       category: "Product Design",
       company: "Pôle Emploi",
       role: "UX UI Designer",
       dateRange: "Septembre 2023 - Janvier 2024",
-      description: "Service Public de l'Emploi. Conception de l'Emploi Store nouvelle génération avec système de recommandations intelligentes.",
-      shortDescription: "Refonte UX avec IA",
+      description: "Conception de l'Emploi Store nouvelle génération avec système de recommandations intelligentes.",
+      shortDescription: "Conception de l'Emploi Store nouvelle génération avec système de recommandations intelligentes.",
       image: "/projects/pole-emploi/pole-emploi-projet-creatin.png",
       galleries: [
         {

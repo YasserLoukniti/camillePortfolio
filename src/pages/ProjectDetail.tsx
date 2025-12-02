@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiArrowLeft, FiX, FiChevronLeft, FiChevronRight, FiAward, FiTarget, FiZap } from 'react-icons/fi';
+import { FiArrowLeft, FiX, FiChevronLeft, FiChevronRight, FiAward, FiTarget, FiZap, FiArrowRight, FiLinkedin } from 'react-icons/fi';
 import { HiOutlineSparkles } from 'react-icons/hi';
 import { theme } from '../styles/theme';
 import { portfolioData } from '../data/portfolio';
@@ -756,6 +756,169 @@ const FeatureDesc = styled.p`
   text-align: center;
 `;
 
+// ========= RELATED CASE STUDIES =========
+const RelatedSection = styled.section`
+  max-width: 1400px;
+  margin: 80px auto 0;
+  padding: 80px 40px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+  @media (max-width: 768px) {
+    padding: 60px 20px 0;
+    margin-top: 60px;
+  }
+`;
+
+const RelatedTitle = styled.h3`
+  font-size: 32px;
+  font-weight: 700;
+  color: ${theme.colors.white};
+  text-align: center;
+  margin-bottom: 48px;
+`;
+
+const RelatedGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const RelatedCard = styled(motion.div)`
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    transform: translateY(-8px);
+    border-color: rgba(139, 92, 246, 0.4);
+    box-shadow: 0 20px 40px rgba(139, 92, 246, 0.2);
+  }
+`;
+
+const RelatedImage = styled.div<{ $image: string }>`
+  width: 100%;
+  height: 240px;
+  background: url(${props => props.$image}) center/cover no-repeat;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.9));
+  }
+`;
+
+const RelatedContent = styled.div`
+  padding: 32px;
+`;
+
+const RelatedCardTitle = styled.h4`
+  font-size: 24px;
+  font-weight: 600;
+  color: ${theme.colors.white};
+  margin-bottom: 12px;
+`;
+
+const RelatedDescription = styled.p`
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.6;
+  margin-bottom: 20px;
+`;
+
+const RelatedLink = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #8b5cf6;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+
+  svg {
+    transition: transform 0.3s ease;
+  }
+
+  ${RelatedCard}:hover & {
+    gap: 12px;
+
+    svg {
+      transform: translateX(4px);
+    }
+  }
+`;
+
+const CTASection = styled(motion.div)`
+  text-align: center;
+  margin-top: ${theme.spacing['16']};
+  padding: ${theme.spacing['12']} ${theme.spacing['6']};
+  background: linear-gradient(135deg,
+    rgba(168, 85, 247, 0.1) 0%,
+    rgba(255, 140, 90, 0.1) 100%
+  );
+  border-radius: ${theme.borderRadius['2xl']};
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+`;
+
+const CTATitle = styled.h3`
+  font-size: ${theme.fontSizes['2xl']};
+  font-weight: ${theme.fontWeights.bold};
+  color: ${theme.colors.white};
+  margin-bottom: ${theme.spacing['3']};
+`;
+
+const CTAText = styled.p`
+  font-size: ${theme.fontSizes.base};
+  color: ${theme.colors.gray400};
+  margin-bottom: ${theme.spacing['6']};
+  line-height: ${theme.lineHeights.relaxed};
+`;
+
+const LinkedInButton = styled.a`
+  display: inline-flex;
+  align-items: center;
+  gap: ${theme.spacing['2']};
+  padding: ${theme.spacing['3']} ${theme.spacing['6']};
+  background: linear-gradient(135deg, ${theme.colors.violet}, ${theme.colors.orange});
+  color: ${theme.colors.white};
+  border: none;
+  border-radius: ${theme.borderRadius.full};
+  font-size: ${theme.fontSizes.base};
+  font-weight: ${theme.fontWeights.semibold};
+  text-decoration: none;
+  cursor: pointer;
+  transition: all ${theme.transitions.base};
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+
+    svg {
+      transform: translateX(4px);
+    }
+  }
+`;
+
 // ========= LIGHTBOX =========
 const Lightbox = styled(motion.div)`
   position: fixed;
@@ -1318,6 +1481,69 @@ const ProjectDetail: React.FC = () => {
               ))}
             </FeaturesList>
           </FeaturesSection>
+        )}
+
+        {/* Related Case Studies - Only for Pôle Emploi */}
+        {project.id === 3 && (
+          <RelatedSection>
+            <RelatedTitle>Découvrir d'autres études de cas</RelatedTitle>
+            <RelatedGrid>
+              <RelatedCard
+                whileHover={{ y: -8 }}
+                onClick={() => navigate('/weneeds/interview')}
+              >
+                <RelatedImage $image="/projects/weneeds/Interview.png" />
+                <RelatedContent>
+                  <RelatedCardTitle>Interview IA Conversationnelle</RelatedCardTitle>
+                  <RelatedDescription>
+                    Interface conversationnelle où l'IA remplace les appels de pré-qualification RH par une expérience empathique et efficace
+                  </RelatedDescription>
+                  <RelatedLink>
+                    Voir l'étude de cas <FiArrowRight />
+                  </RelatedLink>
+                </RelatedContent>
+              </RelatedCard>
+
+              <RelatedCard
+                whileHover={{ y: -8 }}
+                onClick={() => navigate('/edf')}
+              >
+                <RelatedImage $image="/projects/edf/edf-dashboard.png" />
+                <RelatedContent>
+                  <RelatedCardTitle>Produit B2B Énergétique - EDF</RelatedCardTitle>
+                  <RelatedDescription>
+                    Design d'une plateforme SaaS de gestion énergétique et standardisation de produits B2B scalables
+                  </RelatedDescription>
+                  <RelatedLink>
+                    Voir l'étude de cas <FiArrowRight />
+                  </RelatedLink>
+                </RelatedContent>
+              </RelatedCard>
+            </RelatedGrid>
+          </RelatedSection>
+        )}
+
+        {/* CTA Section for Pôle Emploi */}
+        {project.id === 3 && (
+          <CTASection
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <CTATitle>Intéressé par ce projet ?</CTATitle>
+            <CTAText>
+              Discutons de la façon dont je peux contribuer à vos projets
+            </CTAText>
+            <LinkedInButton
+              href={portfolioData.personal.linkedIn}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FiLinkedin />
+              Me contacter sur LinkedIn
+            </LinkedInButton>
+          </CTASection>
         )}
       </HeroSection>
 

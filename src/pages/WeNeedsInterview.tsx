@@ -2,8 +2,9 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { FiArrowLeft, FiTarget, FiSearch, FiTrendingUp, FiLayers, FiMessageCircle } from 'react-icons/fi';
+import { FiArrowLeft, FiTarget, FiSearch, FiTrendingUp, FiLayers, FiMessageCircle, FiArrowRight, FiLinkedin } from 'react-icons/fi';
 import { theme } from '../styles/theme';
+import { portfolioData } from '../data/portfolio';
 
 const PageContainer = styled.div`
   min-height: 100vh;
@@ -403,6 +404,157 @@ const LearningsBox = styled(motion.div)`
   margin-top: ${theme.spacing['16']};
 `;
 
+const RelatedCaseStudies = styled(motion.div)`
+  margin-top: ${theme.spacing['16']};
+  padding-top: ${theme.spacing['16']};
+  border-top: 1px solid ${theme.colors.gray800};
+`;
+
+const RelatedTitle = styled.h3`
+  font-size: ${theme.fontSizes['2xl']};
+  font-weight: ${theme.fontWeights.bold};
+  color: ${theme.colors.white};
+  text-align: center;
+  margin-bottom: ${theme.spacing['8']};
+`;
+
+const RelatedGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: ${theme.spacing['6']};
+
+  @media (max-width: ${theme.breakpoints.md}) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const RelatedCard = styled(motion.div)`
+  background: linear-gradient(135deg,
+    ${theme.colors.gray900} 0%,
+    rgba(168, 85, 247, 0.05) 100%
+  );
+  border: 1px solid ${theme.colors.gray800};
+  border-radius: ${theme.borderRadius.xl};
+  overflow: hidden;
+  cursor: pointer;
+  transition: all ${theme.transitions.base};
+
+  &:hover {
+    transform: translateY(-8px);
+    border-color: ${theme.colors.violet};
+    box-shadow: 0 20px 40px rgba(168, 85, 247, 0.2);
+  }
+`;
+
+const RelatedImage = styled.div<{ image: string }>`
+  width: 100%;
+  height: 200px;
+  background: url(${props => props.image}) center/cover no-repeat;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.8));
+  }
+`;
+
+const RelatedContent = styled.div`
+  padding: ${theme.spacing['6']};
+`;
+
+const RelatedCardTitle = styled.h4`
+  font-size: ${theme.fontSizes.xl};
+  font-weight: ${theme.fontWeights.semibold};
+  color: ${theme.colors.white};
+  margin-bottom: ${theme.spacing['2']};
+`;
+
+const RelatedDescription = styled.p`
+  font-size: ${theme.fontSizes.sm};
+  color: ${theme.colors.gray400};
+  line-height: ${theme.lineHeights.relaxed};
+  margin-bottom: ${theme.spacing['4']};
+`;
+
+const RelatedLink = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${theme.spacing['2']};
+  color: ${theme.colors.violet};
+  font-size: ${theme.fontSizes.sm};
+  font-weight: ${theme.fontWeights.semibold};
+  transition: all ${theme.transitions.base};
+
+  svg {
+    transition: transform ${theme.transitions.base};
+  }
+
+  ${RelatedCard}:hover & {
+    gap: ${theme.spacing['3']};
+
+    svg {
+      transform: translateX(4px);
+    }
+  }
+`;
+
+const CTASection = styled(motion.div)`
+  text-align: center;
+  margin-top: ${theme.spacing['16']};
+  padding: ${theme.spacing['12']} ${theme.spacing['6']};
+  background: linear-gradient(135deg,
+    rgba(168, 85, 247, 0.1) 0%,
+    rgba(255, 140, 90, 0.1) 100%
+  );
+  border-radius: ${theme.borderRadius['2xl']};
+  border: 1px solid rgba(168, 85, 247, 0.2);
+`;
+
+const CTATitle = styled.h3`
+  font-size: ${theme.fontSizes['2xl']};
+  font-weight: ${theme.fontWeights.bold};
+  color: ${theme.colors.white};
+  margin-bottom: ${theme.spacing['3']};
+`;
+
+const CTAText = styled.p`
+  font-size: ${theme.fontSizes.base};
+  color: ${theme.colors.gray400};
+  margin-bottom: ${theme.spacing['6']};
+  line-height: ${theme.lineHeights.relaxed};
+`;
+
+const LinkedInButton = styled.a`
+  display: inline-flex;
+  align-items: center;
+  gap: ${theme.spacing['2']};
+  padding: ${theme.spacing['3']} ${theme.spacing['6']};
+  background: linear-gradient(135deg, ${theme.colors.violet}, ${theme.colors.orange});
+  color: ${theme.colors.white};
+  border: none;
+  border-radius: ${theme.borderRadius.full};
+  font-size: ${theme.fontSizes.base};
+  font-weight: ${theme.fontWeights.semibold};
+  text-decoration: none;
+  cursor: pointer;
+  transition: all ${theme.transitions.base};
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+`;
+
 const WeNeedsInterview: React.FC = () => {
   const navigate = useNavigate();
 
@@ -504,7 +656,7 @@ const WeNeedsInterview: React.FC = () => {
           <SubSection>
             <h3>Besoins identifiés :</h3>
             <CardsGrid>
-              <MiniCard whileHover={{ y: -4 }}>Interaction familière et rassurante (pas d'effet "test")</MiniCard>
+              <MiniCard whileHover={{ y: -4 }}>Interaction familière et rassurante</MiniCard>
               <MiniCard whileHover={{ y: -4 }}>Questions adaptées à l'offre (pas de standardisation)</MiniCard>
               <MiniCard whileHover={{ y: -4 }}>Gestion du temps (limiter les réponses trop longues)</MiniCard>
               <MiniCard whileHover={{ y: -4 }}>Parcours post-interview clair (succès/échec)</MiniCard>
@@ -555,7 +707,7 @@ const WeNeedsInterview: React.FC = () => {
               <Image src="/projects/weneeds/Interview.png" alt="Interface web de l'interview" />
             </ImageContainer>
             <ImageCaption>
-              Layout vertical inspiré des apps de chat, avec bannière entreprise, timer et barre de progression
+              Layout inspiré des apps de chat, avec bannière entreprise, timer et barre de progression
             </ImageCaption>
           </ImageBlock>
 
@@ -568,7 +720,7 @@ const WeNeedsInterview: React.FC = () => {
             <CardsGrid>
               <MiniCard whileHover={{ y: -4 }}>Bannière entreprise en fond (blur + transparence)</MiniCard>
               <MiniCard whileHover={{ y: -4 }}>Question en très gros (focus total)</MiniCard>
-              <MiniCard whileHover={{ y: -4 }}>Timer circulaire visuel</MiniCard>
+              <MiniCard whileHover={{ y: -4 }}>Timer visuel</MiniCard>
               <MiniCard whileHover={{ y: -4 }}>Champ de réponse style messagerie en bas</MiniCard>
               <MiniCard whileHover={{ y: -4 }}>Navigation séquentielle (une question à la fois)</MiniCard>
             </CardsGrid>
@@ -584,7 +736,7 @@ const WeNeedsInterview: React.FC = () => {
               <Image src="/projects/weneeds/mobile.png" alt="Interface mobile immersive" />
             </ImageContainer>
             <ImageCaption>
-              Expérience mobile immersive avec question plein écran, bannière en fond blur et timer circulaire
+              Expérience mobile immersive avec question plein écran, bannière en fond blur et timer
             </ImageCaption>
           </ImageBlock>
         </SectionBlock>
@@ -769,6 +921,68 @@ const WeNeedsInterview: React.FC = () => {
             <MiniCard whileHover={{ y: -4 }}><strong>L'empathie passe par les détails :</strong> wording, timing, alternatives post-échec</MiniCard>
           </CardsGrid>
         </LearningsBox>
+
+        <RelatedCaseStudies
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+        >
+          <RelatedTitle>Découvrir les autres études de cas WeNeeds</RelatedTitle>
+          <RelatedGrid>
+            <RelatedCard
+              whileHover={{ y: -8 }}
+              onClick={() => navigate('/weneeds/widgets')}
+            >
+              <RelatedImage image="/projects/weneeds/widg1.png" />
+              <RelatedContent>
+                <RelatedCardTitle>Widgets Personnalisables</RelatedCardTitle>
+                <RelatedDescription>
+                  Architecture produit modulaire permettant une personnalisation poussée des profils candidats et entreprises
+                </RelatedDescription>
+                <RelatedLink>
+                  Voir l'étude de cas <FiArrowRight />
+                </RelatedLink>
+              </RelatedContent>
+            </RelatedCard>
+
+            <RelatedCard
+              whileHover={{ y: -8 }}
+              onClick={() => navigate('/weneeds/dashboard')}
+            >
+              <RelatedImage image="/projects/weneeds/analyse.png" />
+              <RelatedContent>
+                <RelatedCardTitle>Dashboard Analytics RH</RelatedCardTitle>
+                <RelatedDescription>
+                  Dashboard d'analyse complet générant des insights sur les candidats à partir de l'interview IA
+                </RelatedDescription>
+                <RelatedLink>
+                  Voir l'étude de cas <FiArrowRight />
+                </RelatedLink>
+              </RelatedContent>
+            </RelatedCard>
+          </RelatedGrid>
+        </RelatedCaseStudies>
+
+        <CTASection
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+        >
+          <CTATitle>Intéressé par ce projet ?</CTATitle>
+          <CTAText>
+            Discutons de la façon dont je peux contribuer à vos projets
+          </CTAText>
+          <LinkedInButton
+            href={portfolioData.personal.linkedIn}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FiLinkedin />
+            Me contacter sur LinkedIn
+          </LinkedInButton>
+        </CTASection>
       </ContentSection>
     </PageContainer>
   );
