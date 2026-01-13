@@ -677,6 +677,35 @@ const WeNeedsWidgets: React.FC = () => {
           </ResearchSection>
         </SectionBlock>
 
+        <SectionBlock
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+        >
+          <SectionHeader>
+            <SectionIcon>
+              <FiTarget size={24} />
+            </SectionIcon>
+            <SectionTitle>Solution trouvée</SectionTitle>
+          </SectionHeader>
+
+          <ResearchBox style={{ marginTop: theme.spacing['8'] }}>
+            <InsightItem>
+              <InsightIcon>🎨</InsightIcon>
+              <InsightText>
+                J'ai architecturé le système en 3 tailles : petit, moyen et grand. Chaque widget existe en version web et mobile.
+              </InsightText>
+            </InsightItem>
+            <InsightItem>
+              <InsightIcon>✨</InsightIcon>
+              <InsightText>
+                Avec les développeurs, on a créé un système de drag and drop fluide où les widgets se réorganisent automatiquement.
+              </InsightText>
+            </InsightItem>
+          </ResearchBox>
+        </SectionBlock>
+
         <ImageBlock
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
