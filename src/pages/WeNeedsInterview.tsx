@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { FiArrowLeft, FiTarget, FiSearch, FiTrendingUp, FiLayers, FiMessageCircle, FiArrowRight, FiLinkedin, FiUsers, FiCheckCircle } from 'react-icons/fi';
+import { FiArrowLeft, FiTarget, FiSearch, FiTrendingUp, FiLayers, FiMessageCircle, FiArrowRight, FiLinkedin } from 'react-icons/fi';
 import { theme } from '../styles/theme';
 import { portfolioData } from '../data/portfolio';
 
@@ -397,52 +397,6 @@ const MetricsSubtitle = styled.p`
   font-size: ${theme.fontSizes.base};
   color: ${theme.colors.gray400};
   margin-bottom: ${theme.spacing['6']};
-`;
-
-const MetricBar = styled.div`
-  margin-bottom: ${theme.spacing['6']};
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-`;
-
-const MetricLabel = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: ${theme.spacing['2']};
-  font-size: ${theme.fontSizes.base};
-  color: ${theme.colors.gray300};
-
-  span:last-child {
-    font-weight: ${theme.fontWeights.bold};
-    color: ${theme.colors.white};
-  }
-`;
-
-const MetricBarContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${theme.spacing['3']};
-  font-size: ${theme.fontSizes.sm};
-  color: ${theme.colors.gray400};
-`;
-
-const MetricBarBefore = styled.div<{ width: number }>`
-  height: 8px;
-  background: rgba(168, 85, 247, 0.3);
-  border-radius: ${theme.borderRadius.full};
-  width: ${props => props.width}%;
-  min-width: 60px;
-`;
-
-const MetricBarAfter = styled.div<{ width: number }>`
-  height: 8px;
-  background: ${theme.colors.gradientAI};
-  border-radius: ${theme.borderRadius.full};
-  width: ${props => props.width}%;
-  min-width: 40px;
 `;
 
 const ProtocolBox = styled.div`
